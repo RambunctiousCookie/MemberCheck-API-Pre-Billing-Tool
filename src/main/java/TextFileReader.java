@@ -11,14 +11,6 @@ public class TextFileReader {
         while ((line = bufferedReader.readLine()) != null) {
             System.out.println(line);
         }
-
-
-//        BufferedReader reader = new BufferedReader(new FileReader(textFile));
-//        String line;
-//
-//        while ((line = reader.readLine()) != null) {
-//            System.out.println(line);
-//        }
-//        reader.close();
+        reader.close();
     }
 }
