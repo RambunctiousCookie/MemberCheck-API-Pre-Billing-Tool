@@ -19,8 +19,7 @@ public class BillingRunner {
         String keyPath = "/key.txt";
 
         List<String[]> myCSV = HandlerCSV.Read(csvPath);
-
-        HandlerCSV.Print(myCSV);
+        //HandlerCSV.Print(myCSV);
 
         String apiKey = HandlerTxt.Read(keyPath);
 
@@ -37,8 +36,6 @@ public class BillingRunner {
 
         List<TreeNode> nodes = root.getChildren();
 
-        //String[] orgIds = {"John_Org" };
-
         try {
             LocalDate[] desiredDate = DateUtil.getQuartileDates(2023, 4);
 
@@ -47,69 +44,11 @@ public class BillingRunner {
             for(TreeNode node : nodes)
                 scanCountMapper.put(node.getId(), TreeUtil.sumSumSingleAndBatchScansForPeriod(node, apiService,desiredDate));
 
-//            //OLD- not inclusive of subtrees //TODO: edit
-//            for(String orgId : orgIds)
-//                scanCountMapper.put(orgId,CalculationUtil.getTotalScansByOrgId(apiService, orgId, desiredDate));
-
-
-//            {
-////                int scans = CalculationUtil.getTotalScansByOrgId(apiService, orgId, desiredDate);
-////                scanCountMapper.put(orgId,scans);
-//            }
-
-
             for (var elem : scanCountMapper.entrySet())
                 System.out.println(elem.getKey() + ": "+ elem.getValue() + " scans");
 
             //TODO: note that the report does not include scans done on day itself today
-            //System.out.println(singleMemberScans+", "+ singleCorpScans);
-
-            System.out.println("API Call (Scans) Success");
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-
-        try {
-//            JsonElement allOrgs = apiService.fetchOrgListData();
-//            System.out.println("API Call (OrgList) Success");
-//            TreeNode root = TreeUtil.buildTree(allOrgs).getRoot();
-//
-//            // Print or manipulate the tree as needed
-//            if (root != null) {
-//                TreeUtil.printTree(root, "\t");
-//            }
-
-            System.out.println("//----------------------------------------------------");
-
-            root = TreeUtil.buildTreeBySpecifyingRoot(allOrgs, "John_Org");
-
-            System.out.println();
-
-            if (root != null) {
-                TreeUtil.printTree(root, "\t");
-            }
-
-            System.out.println("//----------------------------------------------------");
-
-            //int count = TreeUtil.recursiveSumSingleAndBatchScansForPeriod(root, apiService,DateUtil.getQuartileDates(2023, 4));
-
-            int count = TreeUtil.sumSumSingleAndBatchScansForPeriod(root, apiService,DateUtil.getQuartileDates(2023, 4));
-
-            System.out.println(count);
-
-            System.out.println("//----------------------------------------------------");
-
-
-
-
-//            try{
-//                int count = TreeUtil.ParallelTreeValueCalculation(root,apiService,DateUtil.getQuartileDates(2023, 4));
-//                System.out.println(count);
-//            }catch (ExecutionException e){
-//                System.out.println(e.getMessage());
-//            } catch (InterruptedException e) {
-//                throw new RuntimeException(e);
-//            }
+            //System.out.println("API Call (Scans) Success");
 
         } catch (IOException e) {
             System.out.println(e.getMessage());
