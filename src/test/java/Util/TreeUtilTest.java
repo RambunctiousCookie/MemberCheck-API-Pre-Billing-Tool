@@ -15,6 +15,8 @@ public class TreeUtilTest {
 
     private static ApiService apiService;
 
+    private static CalculationUtil calculationUtil;
+
     private static LocalDate[] desiredDate;
 
     private static TreeNode[] treeNodes;
@@ -24,6 +26,7 @@ public class TreeUtilTest {
     @BeforeAll
     public static void setup() {
         apiService = Mockito.mock(ApiService.class);
+        calculationUtil = Mockito.mock(CalculationUtil.class);
         desiredDate = new LocalDate[] {
                 LocalDate.of(2023, 1, 1),
                 LocalDate.of(2023, 12, 31)
@@ -50,7 +53,7 @@ public class TreeUtilTest {
         int expectedSum = 0;
 
         for(int i=0;i< treeNodes.length;i++){
-            Mockito.when(CalculationUtil.getTotalScansByOrgId(apiService, treeNodes[i].getId(), desiredDate)).thenReturn(i);
+            Mockito.when(calculationUtil.getTotalScansByOrgId(apiService, treeNodes[i].getId(), desiredDate)).thenReturn(i);
             expectedSum+=i;
         }
 
