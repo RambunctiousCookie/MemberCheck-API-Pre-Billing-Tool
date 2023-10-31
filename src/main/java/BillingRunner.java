@@ -1,9 +1,10 @@
 import Service.ApiService;
-import Service.HandlerCSV;
-import Service.HandlerTxt;
+import Util.HandlerCSV;
+import Util.HandlerTxt;
 import com.google.gson.JsonElement;
 import com.opencsv.exceptions.CsvException;
 import java.io.*;
+import java.time.LocalDate;
 import java.util.List;
 
 public class BillingRunner {
@@ -20,8 +21,8 @@ public class BillingRunner {
         ApiService apiService = new ApiService("632b36d11b82451380165944921ce1ee");
         String orgId = "John_Org";
         try{
-            JsonElement jsonElement= apiService.fetchSingleMemberScanData(orgId);
-            System.out.println("Success");
+            JsonElement jsonElement= apiService.fetchSingleMemberScanData(orgId, LocalDate.of(2023,01,01),LocalDate.of(2023,12,31));
+            System.out.println("API Call Success");
         }catch (IOException e){
             System.out.println(e.getMessage());
         }
