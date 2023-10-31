@@ -141,4 +141,6 @@ public class TreeUtil {
 
         return sum;
     }
+
+    //TODO: use getChildren() to get the nodes to query
 }

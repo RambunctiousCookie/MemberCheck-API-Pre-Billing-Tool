@@ -17,7 +17,6 @@ public class TreeUtilTest {
 
     private static TreeNode[] treeNodes;
     private static TreeNode root;
-
     private static LocalDate[] desiredDate;
 
     @BeforeAll
