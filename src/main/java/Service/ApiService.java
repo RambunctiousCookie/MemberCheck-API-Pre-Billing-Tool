@@ -6,10 +6,12 @@ import lombok.Data;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.util.EntityUtils;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -18,16 +20,23 @@ import java.time.format.DateTimeFormatter;
 @Data
 public class ApiService {
     private String apiKey;
-    DateTimeFormatter dateTimeFormatter;
+    private DateTimeFormatter dateTimeFormatter;
+    private PoolingHttpClientConnectionManager connectionManager;
 
-    public ApiService() {
-        this.apiKey = "";
-        this.dateTimeFormatter= DateTimeFormatter.ofPattern("dd-MM-yyyy");
-    }
+//    public ApiService() {
+//        this.apiKey = "";
+//        this.dateTimeFormatter= DateTimeFormatter.ofPattern("dd-MM-yyyy");
+//        this.connectionManager = new PoolingHttpClientConnectionManager();
+//        connectionManager.setMaxTotal(10);
+//        connectionManager.setDefaultMaxPerRoute(5);
+//    }
 
     public ApiService(String apiKey) {
         this.apiKey = apiKey;
         this.dateTimeFormatter= DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        this.connectionManager = new PoolingHttpClientConnectionManager();
+        connectionManager.setMaxTotal(10);
+        connectionManager.setDefaultMaxPerRoute(5);
     }
 
     public static HttpUriRequest createScanRequest(String apiUrl, String apiKey, String orgId) {
@@ -49,19 +58,35 @@ public class ApiService {
         return httpGet;
     }
 
-    public static String fetchDataFromApi(HttpUriRequest request) throws IOException {
-        try(CloseableHttpClient httpClient = HttpClients.createDefault()){
-            HttpResponse response = httpClient.execute(request);
-            HttpEntity entity = response.getEntity();
-            if (entity != null) {
-                // Convert the response content to a JSON string and return it
-                return EntityUtils.toString(entity);
-            }
-            else {
-                throw new IOException("No data was received");
-            }
-        } catch (IOException e) {
-            throw new IOException(e);
+    public String fetchDataFromApi(HttpUriRequest request) throws IOException {
+//        //try(CloseableHttpClient httpClient = HttpClients.createDefault()){
+//        try(CloseableHttpClient httpClient = HttpClients.custom()
+//                .setConnectionManager(connectionManager)
+//                .build()){
+//            HttpResponse response = httpClient.execute(request);
+//            HttpEntity entity = response.getEntity();
+//            if (entity != null) {
+//                // Convert the response content to a JSON string and return it
+//                return EntityUtils.toString(entity);
+//            }
+//            else {
+//                throw new IOException("No data was received");
+//            }
+//        } catch (IOException e) {
+//            throw new IOException(e);
+//        }
+
+        HttpClient httpClient = HttpClients.custom()
+                .setConnectionManager(connectionManager)
+                .build();
+        HttpResponse response = httpClient.execute(request);
+        HttpEntity entity = response.getEntity();
+        if (entity != null) {
+            // Convert the response content to a JSON string and return it
+            return EntityUtils.toString(entity);
+        }
+        else {
+            throw new IOException("No data was received");
         }
     }
 

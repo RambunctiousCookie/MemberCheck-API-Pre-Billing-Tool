@@ -29,8 +29,12 @@ public class BillingRunner {
 
             Map<String,Integer> scanCountMapper = new HashMap<>();
 
-            for(String orgId : orgIds)
+            for(String orgId : orgIds){
+//                int scans = CalculationUtil.getTotalScansByOrgId(apiService, orgId, desiredDate);
+//                scanCountMapper.put(orgId,scans);
                 scanCountMapper.put(orgId,CalculationUtil.getTotalScansByOrgId(apiService, orgId, desiredDate));
+            }
+
 
             for (var elem : scanCountMapper.entrySet())
                 System.out.println(elem.getKey() + ": "+ elem.getValue() + " scans");
