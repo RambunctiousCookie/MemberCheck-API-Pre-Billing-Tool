@@ -2,6 +2,7 @@ package Service;
 import Util.Status;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import lombok.Data;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
@@ -12,10 +13,15 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import java.io.IOException;
 
+@Data
 public class ApiService {
     //private String apiKey = "632b36d11b82451380165944921ce1ee";
     //TODO: use secrets, Spring-Vault
     private String apiKey;
+
+    public ApiService(String apiKey) {
+        this.apiKey = apiKey;
+    }
 
     public static HttpUriRequest createRequest(String apiUrl, String apiKey, String orgId) {
         HttpGet httpGet = new HttpGet(apiUrl);
@@ -43,21 +49,21 @@ public class ApiService {
         }
     }
 
-    public static JsonElement fetchSingleMemberScanData(String apiKey, String orgId) throws IOException {
+    public JsonElement fetchSingleMemberScanData(String orgId) throws IOException {
         //TODO: can filter the date directly in the queryparam
         String url = "https://demo.api.membercheck.com/api/v2/data-management/member-scans";
         HttpUriRequest request = createRequest(url, apiKey, orgId);
         return JsonParser.parseString(fetchDataFromApi(request));
     }
 
-    public static JsonElement fetchSingleCorpScanData(String apiKey, String orgId) throws IOException {
+    public JsonElement fetchSingleCorpScanData(String orgId) throws IOException {
         //TODO: can filter the date directly in the queryparam
         String url = "https://demo.api.membercheck.com/api/v2/data-management/corp-scans";
         HttpUriRequest request = createRequest(url, apiKey, orgId);
         return JsonParser.parseString(fetchDataFromApi(request));
     }
 
-    public JsonElement fetchBatchMemberScanData(String apiKey, String orgId) throws IOException {
+    public JsonElement fetchBatchMemberScanData(String orgId) throws IOException {
         String url = "https://demo.api.membercheck.com/api/v2/member-scans/batch";
         HttpUriRequest request = createRequest(url, apiKey, orgId);
 
@@ -67,7 +73,7 @@ public class ApiService {
         return JsonParser.parseString(fetchDataFromApi(request));
     }
 
-    public JsonElement fetchBatchCorpScanData(String apiKey, String orgId) throws IOException {
+    public JsonElement fetchBatchCorpScanData(String orgId) throws IOException {
         String url = "https://demo.api.membercheck.com/api/v2/corp-scans/batch";
         HttpUriRequest request = createRequest(url, apiKey, orgId);
 
@@ -77,14 +83,14 @@ public class ApiService {
         return JsonParser.parseString(fetchDataFromApi(request));
     }
 
-    public JsonElement fetchMonitoringMemberScanData(String apiKey, String orgId, Status status)  throws IOException {
+    public JsonElement fetchMonitoringMemberScanData(String orgId, Status status)  throws IOException {
         //Status: On, Off, All
         String url = "https://demo.api.membercheck.com/api/v2/monitoring-lists/member?status=" + status.toString();
         HttpUriRequest request = createRequest(url, apiKey, orgId);
         return JsonParser.parseString(fetchDataFromApi(request));
     }
 
-    public JsonElement fetchMonitoringCorpScanData(String apiKey, String orgId, Status status)  throws IOException {
+    public JsonElement fetchMonitoringCorpScanData(String orgId, Status status)  throws IOException {
         //Status: On, Off, All
         String url = "https://demo.api.membercheck.com/api/v2/monitoring-lists/corp?status=" + status.toString();
         HttpUriRequest request = createRequest(url, apiKey, orgId);
