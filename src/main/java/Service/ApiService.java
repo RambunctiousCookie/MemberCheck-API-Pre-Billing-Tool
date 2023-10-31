@@ -89,10 +89,14 @@ public class ApiService {
         return JsonParser.parseString(fetchDataFromApi(request));
     }
 
-    public JsonElement fetchBatchMemberScanData(String orgId) throws IOException {
+    public JsonElement fetchBatchMemberScanData(String orgId, LocalDate sDate, LocalDate eDate) throws IOException {
         validateApiKey();
 
-        String url = "https://demo.api.membercheck.com/api/v2/member-scans/batch";
+        String url = "https://demo.api.membercheck.com/api/v2/member-scans/batch"
+                +"?from="
+                +sDate.format(dateTimeFormatter).replace("-","%2F")
+                +"&to="
+                +eDate.format(dateTimeFormatter).replace("-","%2F");
         HttpUriRequest request = createRequest(url, apiKey, orgId);
 
         //Can also use "https://demo.api.membercheck.com/api/v2/data-management/member-batch-scans"
@@ -102,10 +106,14 @@ public class ApiService {
         return JsonParser.parseString(fetchDataFromApi(request));
     }
 
-    public JsonElement fetchBatchCorpScanData(String orgId) throws IOException {
+    public JsonElement fetchBatchCorpScanData(String orgId, LocalDate sDate, LocalDate eDate) throws IOException {
         validateApiKey();
 
-        String url = "https://demo.api.membercheck.com/api/v2/corp-scans/batch";
+        String url = "https://demo.api.membercheck.com/api/v2/corp-scans/batch"
+                +"?from="
+                +sDate.format(dateTimeFormatter).replace("-","%2F")
+                +"&to="
+                +eDate.format(dateTimeFormatter).replace("-","%2F");
         HttpUriRequest request = createRequest(url, apiKey, orgId);
 
         //Can also use "https://demo.api.membercheck.com/api/v2/data-management/corp-batch-scans"
@@ -117,7 +125,7 @@ public class ApiService {
 
     public JsonElement fetchMonitoringMemberScanData(String orgId, Status status)  throws IOException {
         validateApiKey();
-
+        //TODO: need to filter manually
         //Status: On, Off, All
         String url = "https://demo.api.membercheck.com/api/v2/monitoring-lists/member?status=" + status.toString();
         HttpUriRequest request = createRequest(url, apiKey, orgId);
@@ -126,7 +134,7 @@ public class ApiService {
 
     public JsonElement fetchMonitoringCorpScanData(String orgId, Status status)  throws IOException {
         validateApiKey();
-
+        //TODO: need to filter manually
         //Status: On, Off, All
         String url = "https://demo.api.membercheck.com/api/v2/monitoring-lists/corp?status=" + status.toString();
         HttpUriRequest request = createRequest(url, apiKey, orgId);

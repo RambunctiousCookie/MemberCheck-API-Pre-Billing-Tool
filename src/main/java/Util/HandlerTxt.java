@@ -22,6 +22,4 @@ public class HandlerTxt {
         reader.close();
         return stringBuilder.toString();
     }
-
-
 }

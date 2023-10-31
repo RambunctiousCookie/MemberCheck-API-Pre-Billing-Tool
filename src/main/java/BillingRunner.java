@@ -1,4 +1,5 @@
 import Service.ApiService;
+import Util.DateUtil;
 import Util.HandlerCSV;
 import Util.HandlerTxt;
 import com.google.gson.JsonElement;
@@ -21,9 +22,13 @@ public class BillingRunner {
         ApiService apiService = new ApiService("632b36d11b82451380165944921ce1ee");
         String orgId = "John_Org";
         try{
-            JsonElement jsonElement= apiService.fetchSingleMemberScanData(orgId, LocalDate.of(2023,01,01),LocalDate.of(2023,12,31));
+            LocalDate[] desiredDate = DateUtil.getQuartileDates(2023,4);
+            JsonElement jsonElement= apiService.fetchSingleMemberScanData(orgId, desiredDate[0],desiredDate[1]);
+
+            System.out.println("Elements: " + jsonElement.getAsJsonArray().size());
+
             System.out.println("API Call Success");
-        }catch (IOException e){
+        } catch (IOException e) {
             System.out.println(e.getMessage());
         }
 
