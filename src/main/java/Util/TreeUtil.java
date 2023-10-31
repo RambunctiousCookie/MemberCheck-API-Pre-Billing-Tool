@@ -10,11 +10,8 @@ import data.TreePackage;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Stack;
 
 public class TreeUtil {
     public static TreeNode buildTreeBySpecifyingRoot(JsonElement orgListJson, String rootId) {
@@ -113,16 +110,35 @@ public class TreeUtil {
 //    }
 
 
-    public static int getTotalSingleAndBatchScansForPeriod(TreeNode node, ApiService apiService, LocalDate[] desiredDate) throws IOException {
-        //recursive method- too slow
-        if (node == null) {
-            return 0;   //base case
-        }
-        int totalValue = CalculationUtil.getTotalScansByOrgId(apiService,node.getId(),desiredDate);
+//    public static int recursiveSumSingleAndBatchScansForPeriod(TreeNode node, ApiService apiService, LocalDate[] desiredDate) throws IOException {
+//        //recursive method- too slow
+//        if (node == null) {
+//            return 0;   //base case
+//        }
+//        int totalValue = CalculationUtil.getTotalScansByOrgId(apiService,node.getId(),desiredDate);
+//
+//        for (TreeNode child : node.getChildren()) {
+//            totalValue += recursiveSumSingleAndBatchScansForPeriod(child, apiService,desiredDate);
+//        }
+//        return totalValue;
+//        //TODO: reorganize, test this recursive
+//    }
 
-        for (TreeNode child : node.getChildren()) {
-            totalValue += getTotalSingleAndBatchScansForPeriod(child, apiService,desiredDate);
+
+    public static int sumSumSingleAndBatchScansForPeriod (TreeNode root, ApiService apiService, LocalDate[] desiredDate) throws IOException {
+        int sum = 0;
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(root);
+
+        while (!stack.isEmpty()) {
+            TreeNode currentNode = stack.pop();
+            sum += CalculationUtil.getTotalScansByOrgId(apiService,currentNode.getId(),desiredDate);
+
+            for (TreeNode child : currentNode.getChildren()) {
+                stack.push(child);
+            }
         }
-        return totalValue;
+
+        return sum;
     }
 }

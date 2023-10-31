@@ -1,17 +1,14 @@
-import com.sun.source.tree.Tree;
 import data.TreeNode;
 import Service.ApiService;
 import Util.*;
 import com.google.gson.JsonElement;
 import com.opencsv.exceptions.CsvException;
 
-import java.awt.*;
 import java.io.*;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 public class BillingRunner {
     public static void main(String[] args) throws IOException, CsvException {
@@ -66,7 +63,11 @@ public class BillingRunner {
 
             System.out.println("//----------------------------------------------------");
 
-            int count = TreeUtil.getTotalSingleAndBatchScansForPeriod(root, apiService,DateUtil.getQuartileDates(2023, 4));
+            //int count = TreeUtil.recursiveSumSingleAndBatchScansForPeriod(root, apiService,DateUtil.getQuartileDates(2023, 4));
+
+            int count = TreeUtil.sumSumSingleAndBatchScansForPeriod(root, apiService,DateUtil.getQuartileDates(2023, 4));
+
+            System.out.println(count);
 
 //            try{
 //                int count = TreeUtil.ParallelTreeValueCalculation(root,apiService,DateUtil.getQuartileDates(2023, 4));
