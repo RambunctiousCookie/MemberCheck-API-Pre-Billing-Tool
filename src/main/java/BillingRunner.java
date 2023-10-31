@@ -13,15 +13,14 @@ import java.util.stream.Collectors;
 
 public class BillingRunner {
     public static void main(String[] args) throws IOException, CsvException {
+        //TODO: output it to a csv
+
         String csvPath = "/sample.csv";
-        //String textFilePath = "/sample.txt";
         String keyPath = "/key.txt";
 
         List<String[]> myCSV = HandlerCSV.Read(csvPath);
-        //String text = HandlerTxt.Read(textFilePath);
 
         HandlerCSV.Print(myCSV);
-        //System.out.println(text);
 
         String apiKey = HandlerTxt.Read(keyPath);
 
