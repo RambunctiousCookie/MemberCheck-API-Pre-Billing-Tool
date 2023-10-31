@@ -66,23 +66,20 @@ public class BillingRunner {
 
             System.out.println("//----------------------------------------------------");
 
-            try{
-                int count = TreeUtil.ParallelTreeValueCalculation(root,apiService,DateUtil.getQuartileDates(2023, 4));
+            int count = TreeUtil.getTotalSingleAndBatchScansForPeriod(root, apiService,DateUtil.getQuartileDates(2023, 4));
 
-
-                //int count = TreeUtil.getTotalSingleAndBatchScansForPeriod(root,apiService,DateUtil.getQuartileDates(2023, 4));
-
-                System.out.println(count);
-            }catch (ExecutionException e){
-                System.out.println(e.getMessage());
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+//            try{
+//                int count = TreeUtil.ParallelTreeValueCalculation(root,apiService,DateUtil.getQuartileDates(2023, 4));
+//                System.out.println(count);
+//            }catch (ExecutionException e){
+//                System.out.println(e.getMessage());
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
 
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
-
         System.out.println("Finished");
     }
 }

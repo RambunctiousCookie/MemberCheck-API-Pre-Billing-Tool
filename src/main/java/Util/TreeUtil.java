@@ -36,7 +36,6 @@ public class TreeUtil {
                 String parentId = jsonObject.getAsJsonObject("parentOrg").get("id").getAsString();
                 node.setParentId(parentId);
             }
-
             if(id.equals(rootId))
                 root = node;
         }
@@ -48,8 +47,6 @@ public class TreeUtil {
         }
         return root;
     }
-
-
 
     public static TreePackage buildTree(JsonElement orgListJson){
         JsonArray jsonArray = orgListJson.getAsJsonArray();
@@ -91,31 +88,33 @@ public class TreeUtil {
         }
     }
 
-    public static int  ParallelTreeValueCalculation(TreeNode root, ApiService apiService, LocalDate[] desiredDate) throws IOException, ExecutionException, InterruptedException {
-        int numThreads = Runtime.getRuntime().availableProcessors();
+//    public static int  ParallelTreeValueCalculation(TreeNode root, ApiService apiService, LocalDate[] desiredDate) throws IOException, ExecutionException, InterruptedException {
+//        int numThreads = Runtime.getRuntime().availableProcessors();
+//
+//        ExecutorService executor = Executors.newFixedThreadPool(numThreads);
+//        AtomicInteger totalValue = new AtomicInteger(0);
+//
+//        List<Future<Integer>> futures = new LinkedList<>();
+//
+//        // Divide the tree into subtrees and calculate their total values
+//        for (TreeNode child : root.getChildren()) {
+//            futures.add(executor.submit(() -> getTotalSingleAndBatchScansForPeriod(child, apiService, desiredDate)));
+//        }
+//
+//        // Wait for all threads to complete and accumulate the results
+//        for (Future<Integer> future : futures) {
+//            totalValue.addAndGet(future.get());
+//        }
+//
+//        executor.shutdown();
+//        executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+//
+//        return totalValue.get();
+//    }
 
-        ExecutorService executor = Executors.newFixedThreadPool(numThreads);
-        AtomicInteger totalValue = new AtomicInteger(0);
-
-        List<Future<Integer>> futures = new LinkedList<>();
-
-        // Divide the tree into subtrees and calculate their total values
-        for (TreeNode child : root.getChildren()) {
-            futures.add(executor.submit(() -> getTotalSingleAndBatchScansForPeriod(child, apiService, desiredDate)));
-        }
-
-        // Wait for all threads to complete and accumulate the results
-        for (Future<Integer> future : futures) {
-            totalValue.addAndGet(future.get());
-        }
-
-        executor.shutdown();
-        executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-
-        return totalValue.get();
-    }
 
     public static int getTotalSingleAndBatchScansForPeriod(TreeNode node, ApiService apiService, LocalDate[] desiredDate) throws IOException {
+        //recursive method- too slow
         if (node == null) {
             return 0;   //base case
         }
@@ -126,17 +125,4 @@ public class TreeUtil {
         }
         return totalValue;
     }
-
-//    public static int getTotalSingleAndBatchScansForPeriod(TreeNode node, ApiService apiService, LocalDate[] desiredDate) throws IOException {
-//        //recursive method- too slow
-//        if (node == null) {
-//            return 0;   //base case
-//        }
-//        int totalValue = CalculationUtil.getTotalScansByOrgId(apiService,node.getId(),desiredDate);
-//
-//        for (TreeNode child : node.getChildren()) {
-//            totalValue += getTotalSingleAndBatchScansForPeriod(child, apiService,desiredDate);
-//        }
-//        return totalValue;
-//    }
 }
