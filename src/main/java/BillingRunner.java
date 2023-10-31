@@ -53,7 +53,7 @@ public class BillingRunner {
 
             // Print or manipulate the tree as needed
             if (root != null) {
-                TreeUtil.printTree(root, "");
+                TreeUtil.printTree(root, "\t");
             }
 
         } catch (IOException e) {

@@ -26,30 +26,31 @@ public class TreeUtil {
             //assume jsonObject.has("parentOrg")
             if (!jsonObject.get("parentOrg").isJsonNull()) {
                 String parentId = jsonObject.getAsJsonObject("parentOrg").get("id").getAsString();
-                node.setParent(idToNodeMap.get(parentId));
+                node.setParentId(parentId);
             } else {
                 root = node; // Assume there is only one root
             }
         }
 
         // Second pass to link children to their parents
-//        for (TreeNode node : idToNodeMap.values()) {
+        for (TreeNode node : idToNodeMap.values()) {
+            if (node.getParentId() != null) {
+                idToNodeMap.get(node.getParentId()).getChildren().add(node);
+            }
+        }
+
+//        idToNodeMap.values().forEach(node -> {
 //            if (node.getParent() != null) {
 //                node.getParent().getChildren().add(node);
 //            }
-//        }
-
-        idToNodeMap.values().forEach(node -> {
-            if (node.getParent() != null) {
-                node.getParent().getChildren().add(node);
-            }
-        });
+//        });
 
         return root;
     }
 
     public static void printTree(TreeNode node, String indent) {
-        System.out.println(indent + node.getName());
+        //recursion
+        System.out.println(indent + node);
         for (TreeNode child : node.getChildren()) {
             printTree(child, indent + "  ");
         }

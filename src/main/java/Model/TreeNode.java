@@ -8,12 +8,19 @@ import java.util.List;
 public class TreeNode {
     String id;
     String name;
-    TreeNode parent;
+    String parentId;
+    //TreeNode parent;
     List<TreeNode> children;
 
     public TreeNode(String id, String name) {
         this.id = id;
         this.name = name;
         this.children = new ArrayList<>();
+    }
+
+    @Override
+    public String toString(){
+        //return this.name + " (" + this.id + ")";
+        return this.id;
     }
 }
