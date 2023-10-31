@@ -34,6 +34,8 @@ public class BillingRunner {
         System.out.println("//----------------------------------------------------");
         List<String> orgIds = root.getChildren().stream().map(x->x.getId()).collect(Collectors.toList());
 
+        List<TreeNode> nodes = root.getChildren();
+
         //String[] orgIds = {"John_Org" };
 
         try {
@@ -41,11 +43,12 @@ public class BillingRunner {
 
             Map<String,Integer> scanCountMapper = new HashMap<>();
 
+            for(TreeNode node : nodes)
+                scanCountMapper.put(node.getId(), TreeUtil.sumSumSingleAndBatchScansForPeriod(node, apiService,desiredDate));
 
-
-            //OLD- not inclusive of subtrees //TODO: edit
-            for(String orgId : orgIds)
-                scanCountMapper.put(orgId,CalculationUtil.getTotalScansByOrgId(apiService, orgId, desiredDate));
+//            //OLD- not inclusive of subtrees //TODO: edit
+//            for(String orgId : orgIds)
+//                scanCountMapper.put(orgId,CalculationUtil.getTotalScansByOrgId(apiService, orgId, desiredDate));
 
 
 //            {
