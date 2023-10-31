@@ -1,3 +1,4 @@
+import com.sun.source.tree.Tree;
 import data.TreeNode;
 import Service.ApiService;
 import Util.*;
@@ -10,6 +11,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 public class BillingRunner {
     public static void main(String[] args) throws IOException, CsvException {
@@ -62,7 +64,20 @@ public class BillingRunner {
                 TreeUtil.printTree(root, "\t");
             }
 
+            System.out.println("//----------------------------------------------------");
 
+            try{
+                int count = TreeUtil.ParallelTreeValueCalculation(root,apiService,DateUtil.getQuartileDates(2023, 4));
+
+
+                //int count = TreeUtil.getTotalSingleAndBatchScansForPeriod(root,apiService,DateUtil.getQuartileDates(2023, 4));
+
+                System.out.println(count);
+            }catch (ExecutionException e){
+                System.out.println(e.getMessage());
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
 
         } catch (IOException e) {
             System.out.println(e.getMessage());
