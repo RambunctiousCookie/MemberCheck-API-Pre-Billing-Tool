@@ -1,12 +1,15 @@
+import Model.TreeNode;
 import Service.ApiService;
-import Util.DateUtil;
-import Util.HandlerCSV;
-import Util.HandlerTxt;
+import Util.*;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.opencsv.exceptions.CsvException;
+
 import java.io.*;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class BillingRunner {
     public static void main(String[] args) throws IOException, CsvException {
@@ -20,14 +23,39 @@ public class BillingRunner {
         System.out.println(text);
 
         ApiService apiService = new ApiService("632b36d11b82451380165944921ce1ee");
-        String orgId = "John_Org";
-        try{
-            LocalDate[] desiredDate = DateUtil.getQuartileDates(2023,4);
-            JsonElement jsonElement= apiService.fetchSingleMemberScanData(orgId, desiredDate[0],desiredDate[1]);
+        String[] orgIds = {"John_Org" };
+        try {
+            LocalDate[] desiredDate = DateUtil.getQuartileDates(2023, 4);
 
-            System.out.println("Elements: " + jsonElement.getAsJsonArray().size());
+            Map<String,Integer> scanCountMapper = new HashMap<>();
 
-            System.out.println("API Call Success");
+            for(String orgId : orgIds)
+                scanCountMapper.put(orgId,CalculationUtil.getTotalScansByOrgId(apiService, orgId, desiredDate));
+
+            for (var elem : scanCountMapper.entrySet())
+                System.out.println(elem.getKey() + ": "+ elem.getValue() + " scans");
+
+            //TODO: note does not include scans included today
+            //System.out.println(singleMemberScans+", "+ singleCorpScans);
+
+            System.out.println("API Call (Scans) Success");
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
+        try {
+            JsonElement allOrgs = apiService.fetchOrgListData();
+
+            System.out.println("API Call (OrgList) Success");
+
+            TreeNode root = TreeUtil.buildTree(allOrgs);
+
+
+            // Print or manipulate the tree as needed
+            if (root != null) {
+                TreeUtil.printTree(root, "");
+            }
+
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }

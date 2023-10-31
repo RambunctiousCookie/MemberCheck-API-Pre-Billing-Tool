@@ -17,8 +17,6 @@ import java.time.format.DateTimeFormatter;
 
 @Data
 public class ApiService {
-    //private String apiKey = "632b36d11b82451380165944921ce1ee";
-    //TODO: use secrets, Spring-Vault
     private String apiKey;
     DateTimeFormatter dateTimeFormatter;
 
@@ -32,11 +30,20 @@ public class ApiService {
         this.dateTimeFormatter= DateTimeFormatter.ofPattern("dd-MM-yyyy");
     }
 
-    public static HttpUriRequest createRequest(String apiUrl, String apiKey, String orgId) {
+    public static HttpUriRequest createScanRequest(String apiUrl, String apiKey, String orgId) {
         HttpGet httpGet = new HttpGet(apiUrl);
 
         httpGet.addHeader(HttpHeaders.ACCEPT, "application/json");
         httpGet.addHeader("X-Request-OrgId", orgId);
+        httpGet.addHeader("api-key", apiKey);
+
+        return httpGet;
+    }
+
+    public static HttpUriRequest createOrgListRequest(String apiUrl, String apiKey) {
+        HttpGet httpGet = new HttpGet(apiUrl);
+
+        httpGet.addHeader(HttpHeaders.ACCEPT, "application/json");
         httpGet.addHeader("api-key", apiKey);
 
         return httpGet;
@@ -72,7 +79,7 @@ public class ApiService {
                 +sDate.format(dateTimeFormatter).replace("-","%2F")
                 +"&to="
                 +eDate.format(dateTimeFormatter).replace("-","%2F");
-        HttpUriRequest request = createRequest(url, apiKey, orgId);
+        HttpUriRequest request = createScanRequest(url, apiKey, orgId);
         return JsonParser.parseString(fetchDataFromApi(request));
     }
 
@@ -85,7 +92,7 @@ public class ApiService {
                 +sDate.format(dateTimeFormatter).replace("-","%2F")
                 +"&to="
                 +eDate.format(dateTimeFormatter).replace("-","%2F");
-        HttpUriRequest request = createRequest(url, apiKey, orgId);
+        HttpUriRequest request = createScanRequest(url, apiKey, orgId);
         return JsonParser.parseString(fetchDataFromApi(request));
     }
 
@@ -97,7 +104,7 @@ public class ApiService {
                 +sDate.format(dateTimeFormatter).replace("-","%2F")
                 +"&to="
                 +eDate.format(dateTimeFormatter).replace("-","%2F");
-        HttpUriRequest request = createRequest(url, apiKey, orgId);
+        HttpUriRequest request = createScanRequest(url, apiKey, orgId);
 
         //Can also use "https://demo.api.membercheck.com/api/v2/data-management/member-batch-scans"
         //identical return value
@@ -114,7 +121,7 @@ public class ApiService {
                 +sDate.format(dateTimeFormatter).replace("-","%2F")
                 +"&to="
                 +eDate.format(dateTimeFormatter).replace("-","%2F");
-        HttpUriRequest request = createRequest(url, apiKey, orgId);
+        HttpUriRequest request = createScanRequest(url, apiKey, orgId);
 
         //Can also use "https://demo.api.membercheck.com/api/v2/data-management/corp-batch-scans"
         //identical return value
@@ -128,7 +135,7 @@ public class ApiService {
         //TODO: need to filter manually
         //Status: On, Off, All
         String url = "https://demo.api.membercheck.com/api/v2/monitoring-lists/member?status=" + status.toString();
-        HttpUriRequest request = createRequest(url, apiKey, orgId);
+        HttpUriRequest request = createScanRequest(url, apiKey, orgId);
         return JsonParser.parseString(fetchDataFromApi(request));
     }
 
@@ -137,7 +144,14 @@ public class ApiService {
         //TODO: need to filter manually
         //Status: On, Off, All
         String url = "https://demo.api.membercheck.com/api/v2/monitoring-lists/corp?status=" + status.toString();
-        HttpUriRequest request = createRequest(url, apiKey, orgId);
+        HttpUriRequest request = createScanRequest(url, apiKey, orgId);
+        return JsonParser.parseString(fetchDataFromApi(request));
+    }
+
+    public JsonElement fetchOrgListData() throws IOException {
+        validateApiKey();
+        String url = "https://demo.api.membercheck.com/api/v2/organisations";
+        HttpUriRequest request = createOrgListRequest(url, apiKey);
         return JsonParser.parseString(fetchDataFromApi(request));
     }
 }
