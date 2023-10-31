@@ -1,10 +1,14 @@
 import java.io.*;
 
 public class TextFileReader {
-    public static void main(String[] args) throws IOException {
-        String textFilePath = "sample.txt"; // Replace with the path to your text file
+    String textFilePath = "sample.txt";
+    public static void Read(String textFilePath) throws IOException {
 
         InputStream inputStream = TextFileReader.class.getResourceAsStream(textFilePath);
+
+        if(inputStream==null)
+            throw new IOException("InputStream is Null!");
+
         InputStreamReader reader = new InputStreamReader(inputStream);
         BufferedReader bufferedReader = new BufferedReader(reader);
         String line;

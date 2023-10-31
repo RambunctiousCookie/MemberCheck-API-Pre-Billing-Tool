@@ -1,13 +1,15 @@
 import com.opencsv.exceptions.CsvException;
-
-
 import java.io.*;
 import java.util.List;
 
-
 public class CSVReader {
-    public static void main(String[] args) throws IOException, CsvException {
-        InputStream inputStream = CSVReader.class.getResourceAsStream("sample.csv");
+    String csvPath = "sample.csv";
+
+    public static void Read(String csvPath) throws IOException, CsvException {
+        InputStream inputStream = CSVReader.class.getResourceAsStream(csvPath);
+        if (inputStream ==null)
+            throw new FileNotFoundException();
+
         Reader reader = new InputStreamReader(inputStream);
 
         com.opencsv.CSVReader csvReader = new com.opencsv.CSVReader(reader);
@@ -20,7 +22,6 @@ public class CSVReader {
 
             System.out.println("Name: " + name + ", Age: " + age);
         }
-
         csvReader.close();
 
     }
