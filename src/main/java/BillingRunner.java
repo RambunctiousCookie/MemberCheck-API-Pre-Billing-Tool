@@ -1,8 +1,7 @@
-import Model.TreeNode;
+import data.TreeNode;
 import Service.ApiService;
 import Util.*;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.opencsv.exceptions.CsvException;
 
 import java.io.*;
@@ -24,6 +23,7 @@ public class BillingRunner {
 
         ApiService apiService = new ApiService("632b36d11b82451380165944921ce1ee");
         String[] orgIds = {"John_Org" };
+
         try {
             LocalDate[] desiredDate = DateUtil.getQuartileDates(2023, 4);
 
@@ -45,11 +45,8 @@ public class BillingRunner {
 
         try {
             JsonElement allOrgs = apiService.fetchOrgListData();
-
             System.out.println("API Call (OrgList) Success");
-
-            TreeNode root = TreeUtil.buildTree(allOrgs);
-
+            TreeNode root = TreeUtil.buildTree(allOrgs).getRoot();
 
             // Print or manipulate the tree as needed
             if (root != null) {

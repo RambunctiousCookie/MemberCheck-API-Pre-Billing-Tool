@@ -9,7 +9,6 @@ import java.time.LocalDate;
 
 public class CalculationUtil {
     public static int getTotalScansByOrgId(ApiService apiService, String orgId, LocalDate[] desiredDate) throws IOException {
-
         int singleMemberScans = apiService.fetchSingleMemberScanData(orgId, desiredDate[0], desiredDate[1]).getAsJsonArray().size();
 
         int singleCorpScans = apiService.fetchSingleCorpScanData(orgId, desiredDate[0], desiredDate[1]).getAsJsonArray().size();

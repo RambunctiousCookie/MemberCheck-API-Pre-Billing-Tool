@@ -1,20 +1,21 @@
 package Util;
 
-import Model.TreeNode;
+import data.TreeNode;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import data.TreePackage;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class TreeUtil {
-    public static TreeNode buildTree(JsonElement orgListJson){
+    public static TreePackage buildTree(JsonElement orgListJson){
         JsonArray jsonArray = orgListJson.getAsJsonArray();
 
         Map<String, TreeNode> idToNodeMap = new HashMap<>();
         TreeNode root = null;
 
-        // First pass to create nodes and build the map
         for (JsonElement element : jsonArray) {
             JsonObject jsonObject = element.getAsJsonObject();
             String id = jsonObject.get("id").getAsString();
@@ -28,7 +29,7 @@ public class TreeUtil {
                 String parentId = jsonObject.getAsJsonObject("parentOrg").get("id").getAsString();
                 node.setParentId(parentId);
             } else {
-                root = node; // Assume there is only one root
+                root = node;
             }
         }
 
@@ -38,14 +39,7 @@ public class TreeUtil {
                 idToNodeMap.get(node.getParentId()).getChildren().add(node);
             }
         }
-
-//        idToNodeMap.values().forEach(node -> {
-//            if (node.getParent() != null) {
-//                node.getParent().getChildren().add(node);
-//            }
-//        });
-
-        return root;
+        return new TreePackage(root,idToNodeMap);
     }
 
     public static void printTree(TreeNode node, String indent) {
@@ -55,5 +49,4 @@ public class TreeUtil {
             printTree(child, indent + "  ");
         }
     }
-
 }
