@@ -4,6 +4,7 @@ import Util.*;
 import com.google.gson.JsonElement;
 import com.opencsv.exceptions.CsvException;
 
+import java.awt.*;
 import java.io.*;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -52,6 +53,16 @@ public class BillingRunner {
             if (root != null) {
                 TreeUtil.printTree(root, "\t");
             }
+
+            root = TreeUtil.buildTreeBySpecifyingRoot(allOrgs, "John_Org");
+
+            System.out.println();
+
+            if (root != null) {
+                TreeUtil.printTree(root, "\t");
+            }
+
+
 
         } catch (IOException e) {
             System.out.println(e.getMessage());
