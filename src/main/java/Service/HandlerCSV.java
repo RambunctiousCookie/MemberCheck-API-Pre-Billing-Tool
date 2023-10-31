@@ -1,3 +1,5 @@
+package Service;
+
 import com.opencsv.exceptions.CsvException;
 import java.io.*;
 import java.util.List;
@@ -18,21 +20,10 @@ public class HandlerCSV {
     }
 
     public static void Print(List<String[]> records){
-//        for (String[] record : records) {
-//            //TODO: modify to fit current design
-//            // Assuming a sample CSV with two columns (name and age)
-////            String name = record[0];
-////            String age = record[1];
-////
-////            System.out.println("Name: " + name + ", Age: " + age);
-//
-//
-//
-//        }
-        for(int i=0;i<records.size();i++){
-            for(int j=0;j<records.get(i).length;j++){
-                System.out.print(records.get(i)[j]);
-                System.out.print("\t\t");
+        for (String[] record : records) {
+            for (String s : record) {
+                System.out.print(s);
+                System.out.print("\t");
             }
             System.out.println();
         }

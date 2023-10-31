@@ -1,3 +1,5 @@
+package Service;
+
 import java.io.*;
 
 public class HandlerTxt {
@@ -16,7 +18,6 @@ public class HandlerTxt {
         while ((line = bufferedReader.readLine()) != null) {
             stringBuilder.append(line); // Append each line to the StringBuilder
             stringBuilder.append("\n");
-            //System.out.println(line);
         }
         reader.close();
         return stringBuilder.toString();
