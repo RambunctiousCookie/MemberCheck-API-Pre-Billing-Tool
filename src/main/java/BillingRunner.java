@@ -14,16 +14,18 @@ import java.util.stream.Collectors;
 public class BillingRunner {
     public static void main(String[] args) throws IOException, CsvException {
         String csvPath = "/sample.csv";
-        String textFilePath = "/sample.txt";
+        //String textFilePath = "/sample.txt";
+        String keyPath = "/key.txt";
 
         List<String[]> myCSV = HandlerCSV.Read(csvPath);
-        String text = HandlerTxt.Read(textFilePath);
+        //String text = HandlerTxt.Read(textFilePath);
 
         HandlerCSV.Print(myCSV);
-        System.out.println(text);
+        //System.out.println(text);
 
-        ApiService apiService = new ApiService("632b36d11b82451380165944921ce1ee");
+        String apiKey = HandlerTxt.Read(keyPath);
 
+        ApiService apiService = new ApiService(apiKey);
 
         JsonElement allOrgs = apiService.fetchOrgListData();
         System.out.println("API Call (OrgList) Success");
