@@ -63,6 +63,8 @@ public class BillingRunner {
 
             Status status = Status.On;
 
+            //desiredDate = DateUtil.getQuartileDates(2023, 3);
+
             for(TreeNode node : companyNodes)
                 contractRenewalScanCountMapper.put(node.getId(), TreeUtil.sumMonitoringScansForPeriodByStatus(node, apiService,desiredDate,status));
 
