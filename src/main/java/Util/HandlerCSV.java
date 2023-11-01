@@ -39,7 +39,7 @@ public class HandlerCSV {
     public static void WriteMonitoredScans(){
         //TODO: implement
     }
-    
+
     public static void WriteMonitoredScanDetails(){
         //TODO: implement
     }
