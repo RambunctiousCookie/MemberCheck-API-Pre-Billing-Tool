@@ -29,4 +29,8 @@ public class HandlerCSV {
         }
     }
 
+    public static void Write(){
+        //TODO: implement
+    }
+
 }

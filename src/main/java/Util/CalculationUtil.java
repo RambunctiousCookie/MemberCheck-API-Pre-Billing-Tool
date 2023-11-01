@@ -48,7 +48,8 @@ public class CalculationUtil {
     }
 
     public static int getTotalMonitoringScansByOrgId(ApiService apiService, String orgId, LocalDate[] desiredDate, Status status) throws IOException{
-        //TODO: need to filter; TEST FILTERING
+        //TODO: filtered; TEST FILTERING
+        //Json date format should be "dateAdded" -> {JsonPrimitive@3165} ""2023-10-26T12:25:27""
 
         JsonArray monitoringMemberScanArray = apiService.fetchMonitoringMemberScanData(orgId,status).getAsJsonArray();
         int monitoringMemberScans = filterMonitoringScansByDate(monitoringMemberScanArray, desiredDate).size();
@@ -56,20 +57,12 @@ public class CalculationUtil {
         JsonArray monitoringCorpScanArray = apiService.fetchMonitoringCorpScanData(orgId,status).getAsJsonArray();
         int monitoringCorpScans = filterMonitoringScansByDate(monitoringCorpScanArray, desiredDate).size();
 
-        //TODO: consider- dateAdded -> {JsonPrimitive@3165} ""2023-10-26T12:25:27""
-
-        //String jsonString = apiService.fetchMonitoringMemberScanData(orgId,status).getAsString();
-
-        //unfiltered
-        //int monitoringMemberScans = apiService.fetchMonitoringMemberScanData(orgId,status).getAsJsonArray().size();
-        //int monitoringCorpScans = apiService.fetchMonitoringCorpScanData(orgId,status).getAsJsonArray().size();
-
         return monitoringMemberScans + monitoringCorpScans;
     }
 
     private static List<JsonObject> filterMonitoringScansByDate(JsonArray jsonArray, LocalDate[] desiredDate){
         Stream<JsonObject> jsonObjectStream = Arrays.stream(new Gson().fromJson(jsonArray, JsonObject[].class));
-        return  jsonObjectStream.filter(x->
+        return jsonObjectStream.filter(x->
                 LocalDateTime.parse(x.get("dateAdded").getAsString(), inputFormatter).isBefore(desiredDate[1].atStartOfDay())  &&
                         LocalDateTime.parse(x.get("dateAdded").getAsString(), inputFormatter).isAfter(desiredDate[0].atStartOfDay())).collect(Collectors.toList());
     }

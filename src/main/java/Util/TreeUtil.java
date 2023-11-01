@@ -121,7 +121,6 @@ public class TreeUtil {
                 stack.push(child);
             }
         }
-
         return sum;
     }
 
@@ -137,7 +136,6 @@ public class TreeUtil {
                 stack.push(child);
             }
         }
-
         return sum;
     }
 
