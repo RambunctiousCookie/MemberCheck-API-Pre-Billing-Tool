@@ -6,6 +6,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import data.TreePackage;
+import enumerable.Status;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -53,10 +54,16 @@ public class TreeUtil {
 
         for (JsonElement element : jsonArray) {
             JsonObject jsonObject = element.getAsJsonObject();
-            String id = jsonObject.get("id").getAsString();
-            String name = jsonObject.get("name").getAsString();
+            String id = jsonObject.get("id") != null ? jsonObject.get("id").getAsString() : "";
+            String name = jsonObject.get("name") != null ? jsonObject.get("name").getAsString() : "";
 
-            TreeNode node = new TreeNode(id, name);
+            //String complianceOfficer = jsonObject.get("complianceOfficer") != null ? jsonObject.get("complianceOfficer").getAsString() : "";
+            String email = jsonObject.get("email") != null ? jsonObject.get("email").getAsString() : "";
+            String isIdvActive = jsonObject.get("isIdvActive") != null ? jsonObject.get("isIdvActive").getAsString() : "";
+            String isMonitoringActive = jsonObject.get("isMonitoringActive") != null ? jsonObject.get("isMonitoringActive").getAsString() : "";
+            String status = jsonObject.get("status") != null ? jsonObject.get("status").getAsString() : "";
+
+            TreeNode node = new TreeNode(id, name, email,isIdvActive,isMonitoringActive,status);
             idToNodeMap.put(id, node);
 
             //assume jsonObject.has("parentOrg")
@@ -85,30 +92,6 @@ public class TreeUtil {
         }
     }
 
-//    public static int  ParallelTreeValueCalculation(TreeNode root, ApiService apiService, LocalDate[] desiredDate) throws IOException, ExecutionException, InterruptedException {
-//        int numThreads = Runtime.getRuntime().availableProcessors();
-//
-//        ExecutorService executor = Executors.newFixedThreadPool(numThreads);
-//        AtomicInteger totalValue = new AtomicInteger(0);
-//
-//        List<Future<Integer>> futures = new LinkedList<>();
-//
-//        // Divide the tree into subtrees and calculate their total values
-//        for (TreeNode child : root.getChildren()) {
-//            futures.add(executor.submit(() -> getTotalSingleAndBatchScansForPeriod(child, apiService, desiredDate)));
-//        }
-//
-//        // Wait for all threads to complete and accumulate the results
-//        for (Future<Integer> future : futures) {
-//            totalValue.addAndGet(future.get());
-//        }
-//
-//        executor.shutdown();
-//        executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-//
-//        return totalValue.get();
-//    }
-
 
 //    public static int recursiveSumSingleAndBatchScansForPeriod(TreeNode node, ApiService apiService, LocalDate[] desiredDate) throws IOException {
 //        //recursive method- too slow
@@ -124,7 +107,7 @@ public class TreeUtil {
 //        //TODO: reorganize, test this recursive
 //    }
 
-
+    //use getChildren() to get the nodes to query
     public static int sumSumSingleAndBatchScansForPeriod (TreeNode root, ApiService apiService, LocalDate[] desiredDate) throws IOException {
         int sum = 0;
         Stack<TreeNode> stack = new Stack<>();
@@ -142,5 +125,21 @@ public class TreeUtil {
         return sum;
     }
 
-    //TODO: use getChildren() to get the nodes to query
+    public static int sumMonitoringScansForPeriodByStatus(TreeNode root, ApiService apiService, LocalDate[] desiredDate, Status status) throws IOException {
+        int sum = 0;
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(root);
+        while (!stack.isEmpty()) {
+            TreeNode currentNode = stack.pop();
+            sum += CalculationUtil.getTotalMonitoringScansByOrgId(apiService,currentNode.getId(),desiredDate, status);
+
+            for (TreeNode child : currentNode.getChildren()) {
+                stack.push(child);
+            }
+        }
+
+        return sum;
+    }
+
+
 }

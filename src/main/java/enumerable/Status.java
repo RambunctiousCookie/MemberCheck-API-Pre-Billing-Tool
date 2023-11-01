@@ -1,4 +1,4 @@
-package Util;
+package enumerable;
 
 public enum Status {
     On, Off, All

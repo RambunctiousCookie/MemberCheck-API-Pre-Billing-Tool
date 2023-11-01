@@ -1,13 +1,26 @@
 package Util;
 
 import Service.ApiService;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import enumerable.Status;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class CalculationUtil {
+
+    private static DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+
     public static int getTotalScansByOrgId(ApiService apiService, String orgId, LocalDate[] desiredDate) throws IOException {
         int singleMemberScans = apiService.fetchSingleMemberScanData(orgId, desiredDate[0], desiredDate[1]).getAsJsonArray().size();
 
@@ -32,5 +45,32 @@ public class CalculationUtil {
         }
 
         return singleMemberScans + singleCorpScans + batchMemberScans + batchCorpScans;
+    }
+
+    public static int getTotalMonitoringScansByOrgId(ApiService apiService, String orgId, LocalDate[] desiredDate, Status status) throws IOException{
+        //TODO: need to filter; TEST FILTERING
+
+        JsonArray monitoringMemberScanArray = apiService.fetchMonitoringMemberScanData(orgId,status).getAsJsonArray();
+        int monitoringMemberScans = filterMonitoringScansByDate(monitoringMemberScanArray, desiredDate).size();
+
+        JsonArray monitoringCorpScanArray = apiService.fetchMonitoringCorpScanData(orgId,status).getAsJsonArray();
+        int monitoringCorpScans = filterMonitoringScansByDate(monitoringCorpScanArray, desiredDate).size();
+
+        //TODO: consider- dateAdded -> {JsonPrimitive@3165} ""2023-10-26T12:25:27""
+
+        //String jsonString = apiService.fetchMonitoringMemberScanData(orgId,status).getAsString();
+
+        //unfiltered
+        //int monitoringMemberScans = apiService.fetchMonitoringMemberScanData(orgId,status).getAsJsonArray().size();
+        //int monitoringCorpScans = apiService.fetchMonitoringCorpScanData(orgId,status).getAsJsonArray().size();
+
+        return monitoringMemberScans + monitoringCorpScans;
+    }
+
+    private static List<JsonObject> filterMonitoringScansByDate(JsonArray jsonArray, LocalDate[] desiredDate){
+        Stream<JsonObject> jsonObjectStream = Arrays.stream(new Gson().fromJson(jsonArray, JsonObject[].class));
+        return  jsonObjectStream.filter(x->
+                LocalDateTime.parse(x.get("dateAdded").getAsString(), inputFormatter).isBefore(desiredDate[1].atStartOfDay())  &&
+                        LocalDateTime.parse(x.get("dateAdded").getAsString(), inputFormatter).isAfter(desiredDate[0].atStartOfDay()) ).collect(Collectors.toList());
     }
 }

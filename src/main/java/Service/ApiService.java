@@ -1,5 +1,5 @@
 package Service;
-import Util.Status;
+import enumerable.Status;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import lombok.Data;
@@ -9,7 +9,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.util.EntityUtils;
@@ -78,7 +77,7 @@ public class ApiService {
 
         HttpClient httpClient = HttpClients.custom()
                 .setConnectionManager(connectionManager)
-                .build();
+                .build();   //Speed up the query flow using connectionManager; TODO: attempt multi-threaded architecture
         HttpResponse response = httpClient.execute(request);
         HttpEntity entity = response.getEntity();
         if (entity != null) {
@@ -97,8 +96,6 @@ public class ApiService {
 
     public JsonElement fetchSingleMemberScanData(String orgId, LocalDate sDate, LocalDate eDate) throws IOException {
         validateApiKey();
-
-        //TODO: can filter the date directly in the queryparam
         String url = "https://demo.api.membercheck.com/api/v2/data-management/member-scans"
                 +"?from="
                 +sDate.format(dateTimeFormatter).replace("-","%2F")
@@ -110,8 +107,6 @@ public class ApiService {
 
     public JsonElement fetchSingleCorpScanData(String orgId,LocalDate sDate, LocalDate eDate) throws IOException {
         validateApiKey();
-
-        //TODO: can filter the date directly in the queryparam
         String url = "https://demo.api.membercheck.com/api/v2/data-management/corp-scans"
                 +"?from="
                 +sDate.format(dateTimeFormatter).replace("-","%2F")
