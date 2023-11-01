@@ -29,7 +29,18 @@ public class HandlerCSV {
         }
     }
 
-    public static void Write(){
+    public static void WriteOrgTree(){
+        //TODO: implement
+    }
+
+    public static void WriteQuarterlyUsage(){
+        //TODO: implement
+    }
+    public static void WriteMonitoredScans(){
+        //TODO: implement
+    }
+    
+    public static void WriteMonitoredScanDetails(){
         //TODO: implement
     }
 

@@ -1,6 +1,4 @@
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import data.TreeNode;
 import Service.ApiService;
 import Util.*;
@@ -78,11 +76,14 @@ public class BillingRunner {
                 monitoringCorpScanArrayDetails.add(apiService.fetchMonitoringCorpScanData(node.getId(),status).getAsJsonArray());
             }
 
-            SortingUtil.sortMonitoringJsonArray(monitoringMemberScanArrayDetails);
-            SortingUtil.sortMonitoringJsonArray(monitoringCorpScanArrayDetails);
+            MonitoringScanUtil.sortMonitoringJsonArray(monitoringMemberScanArrayDetails);
+            MonitoringScanUtil.sortMonitoringJsonArray(monitoringCorpScanArrayDetails);
+
+//            monitoringMemberScanArrayDetails.stream().forEach(System.out::println);
+//            monitoringCorpScanArrayDetails.stream().forEach(System.out::println);
 
             //NOTE TO SELF: TODO use ("monitor" -> false) from API as equivalent of Status.Off
-            System.out.println("//------------------------------------------------");
+            //System.out.println("//------------------------------------------------");
 
         } catch (IOException e) {
             System.out.println(e.getMessage());

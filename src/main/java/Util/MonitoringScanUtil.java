@@ -3,13 +3,12 @@ package Util;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import data.TreeNode;
 
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
-public class SortingUtil {
+public class MonitoringScanUtil {
 
     public static void sortMonitoringJsonArray(List<JsonArray> monitoringScanArrayDetails) {
         //MODIFIES INPLACE
