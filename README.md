@@ -1,3 +1,3 @@
 # AppAML
 
-Backend functional; to complete frontend
+Backend functions tested; to complete frontend and connect
