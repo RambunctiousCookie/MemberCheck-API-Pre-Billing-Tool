@@ -74,29 +74,31 @@ public class BillingRunner {
             for(TreeNode node : companyNodes)
                 monitoringMemberScanArrayDetails.add(apiService.fetchMonitoringMemberScanData(node.getId(),status).getAsJsonArray());
 
-            for(JsonArray jsonArray : monitoringMemberScanArrayDetails){
-//                for(int i=0;i<jsonArray.size();i++){
-//                    jsonArray.get(i).getAsJsonObject();
-//                    //need to sort
-//                }
+            SortingUtil.sortMonitoringJsonArray(monitoringMemberScanArrayDetails);
 
-//                //fails to modify inplace
-//                jsonArray = Arrays.stream(new Gson().fromJson(jsonArray, JsonObject[].class))
+//            for(JsonArray jsonArray : monitoringMemberScanArrayDetails){
+////                for(int i=0;i<jsonArray.size();i++){
+////                    jsonArray.get(i).getAsJsonObject();
+////                    //need to sort
+////                }
+//
+////                //fails to modify inplace
+////                jsonArray = Arrays.stream(new Gson().fromJson(jsonArray, JsonObject[].class))
+////                        .sorted(Comparator.comparing(x -> x.get("monitor").getAsBoolean(), Comparator.reverseOrder()))
+////                        .collect(Collectors.collectingAndThen(
+////                        Collectors.toList(),
+////                        list -> {
+////                            JsonArray jsonArrayResult = new JsonArray();
+////                            list.forEach(jsonArrayResult::add);
+////                            return jsonArrayResult;
+////                        }));
+//                JsonArray sortedArray = Arrays.stream(new Gson().fromJson(jsonArray, JsonObject[].class))
 //                        .sorted(Comparator.comparing(x -> x.get("monitor").getAsBoolean(), Comparator.reverseOrder()))
-//                        .collect(Collectors.collectingAndThen(
-//                        Collectors.toList(),
-//                        list -> {
-//                            JsonArray jsonArrayResult = new JsonArray();
-//                            list.forEach(jsonArrayResult::add);
-//                            return jsonArrayResult;
-//                        }));
-                JsonArray sortedArray = Arrays.stream(new Gson().fromJson(jsonArray, JsonObject[].class))
-                        .sorted(Comparator.comparing(x -> x.get("monitor").getAsBoolean(), Comparator.reverseOrder()))
-                        .collect(JsonArray::new, JsonArray::add, JsonArray::addAll);
-
-                // Replace the original jsonArray with the sorted one
-                monitoringMemberScanArrayDetails.set(monitoringMemberScanArrayDetails.indexOf(jsonArray), sortedArray);
-            }
+//                        .collect(JsonArray::new, JsonArray::add, JsonArray::addAll);
+//
+//                // Replace the original jsonArray with the sorted one
+//                monitoringMemberScanArrayDetails.set(monitoringMemberScanArrayDetails.indexOf(jsonArray), sortedArray);
+//            }
 
             //NOTE TO SELF: TODO use ("monitor" -> false) from API as equivalent of Status.Off
             System.out.println("//------------------------------------------------");
