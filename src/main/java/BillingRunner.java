@@ -28,6 +28,7 @@ public class BillingRunner {
 
         JsonElement allOrgs = apiService.fetchOrgListData();
         System.out.println("API Call (OrgList) Success");
+
         TreeNode root = TreeUtil.buildTree(allOrgs).getRoot();
         if (root != null) {
             TreeUtil.printTree(root, "\t");
@@ -69,7 +70,7 @@ public class BillingRunner {
                 contractRenewalScanCountMapper.put(node.getId(), TreeUtil.sumMonitoringScansForPeriodByStatus(node, apiService,desiredDate,status));
 
             for (var elem : contractRenewalScanCountMapper.entrySet())
-                System.out.println(elem.getKey() + ": "+ elem.getValue() + " monitoring scans");
+                System.out.println(elem.getKey() + ": "+ elem.getValue() + " monitoring scans with status = "+ status);
 
         } catch (IOException e) {
             System.out.println(e.getMessage());

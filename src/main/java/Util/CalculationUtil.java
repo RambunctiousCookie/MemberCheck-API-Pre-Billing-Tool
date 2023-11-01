@@ -71,6 +71,6 @@ public class CalculationUtil {
         Stream<JsonObject> jsonObjectStream = Arrays.stream(new Gson().fromJson(jsonArray, JsonObject[].class));
         return  jsonObjectStream.filter(x->
                 LocalDateTime.parse(x.get("dateAdded").getAsString(), inputFormatter).isBefore(desiredDate[1].atStartOfDay())  &&
-                        LocalDateTime.parse(x.get("dateAdded").getAsString(), inputFormatter).isAfter(desiredDate[0].atStartOfDay()) ).collect(Collectors.toList());
+                        LocalDateTime.parse(x.get("dateAdded").getAsString(), inputFormatter).isAfter(desiredDate[0].atStartOfDay())).collect(Collectors.toList());
     }
 }
