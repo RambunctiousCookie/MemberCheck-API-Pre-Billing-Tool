@@ -1,4 +1,4 @@
-package data;
+package RTT.billing.data;
 
 import lombok.Data;
 

@@ -1,5 +1,5 @@
-package Service;
-import enumerable.Status;
+package RTT.billing.Service;
+import RTT.billing.enumerable.Status;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import lombok.Data;
