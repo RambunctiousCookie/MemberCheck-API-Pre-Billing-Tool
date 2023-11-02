@@ -1,11 +1,11 @@
 package RTT.billing;
 
-import RTT.billing.Config.YamlConfig;
 import RTT.billing.Util.*;
+import RTT.billing.Config.SystemParameters;
+import com.esotericsoftware.yamlbeans.YamlReader;
 import com.google.gson.JsonArray;
 import RTT.billing.data.TreeNode;
 import RTT.billing.Service.ApiService;
-import RTT.billing.Util.*;
 import com.google.gson.JsonElement;
 import com.opencsv.exceptions.CsvException;
 import RTT.billing.enumerable.Status;
@@ -18,31 +18,17 @@ import java.util.stream.Collectors;
 public class BillingRunner {
     public static void main(String[] args) throws IOException, CsvException {
 
-//        String examplePath = "/sample.txt";
-//        InputStream inputStream0 = HandlerTxt.class.getResourceAsStream(examplePath);
-//
-//        if(inputStream0==null)
-//            throw new IOException("InputStream is Null!");
-//        else
-//            System.out.println("Success");
-//
-//
-//
-//        System.out.println("===Testing YamlConfig===");
-//        InputStream inputStream = YamlConfig.class.getResourceAsStream("src/main/resources/config.yaml");
-//        if (inputStream ==null)
-//            throw new FileNotFoundException();
-//        System.out.println("--bp---");
-//
-//        String[] configs = {
-//                YamlConfig.config.parameters.EXAMPLE_00,
-//                YamlConfig.config.parameters.EXAMPLE_01,
-//                YamlConfig.config.parameters.EXAMPLE_02
-//        };
-//        Arrays.stream(configs).forEach(System.out::println);
+        System.out.println("===Testing YamlConfig===");
 
 
+        YamlReader reader = new YamlReader(new FileReader("src/main/resources/config.yaml"));
+        SystemParameters parameters = reader.read(SystemParameters.class);
+        reader.close();
 
+        System.out.println(parameters);
+
+
+        System.out.println("===Testing CSVPath===");
         //TODO: output it to a csv
 
         String csvPath = "/sample.csv";
