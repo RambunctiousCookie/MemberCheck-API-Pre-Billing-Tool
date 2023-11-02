@@ -15,6 +15,42 @@ public class CommandLineApp {
         apiService = new ApiService("");    //create the apiService at the start
 
         Scanner scanner = new Scanner(System.in);
+        String inputKey = "";
+
+        System.out.println("\n\nWelcome! This is a preliminary Command-Line Interface for the Pre-Billing Application. To Use, Please Enter Your API Key.");
+        System.out.println("\t- Your API key can be obtained from the MemberCheck portal, under your profile.");
+        System.out.println("\t- Depending on your Command-Line Interface, you might need to press CTRL+V or RIGHT-CLICK to paste your key in.");
+
+        while (inputKey.equals("")) {
+
+            System.out.print("Enter your key: ");
+
+            try {
+                String tempKey =scanner.next();
+
+                if(apiService.isValidApiKey(tempKey)){
+                    inputKey = tempKey;     //THIS IS THE ONLY WAY TO EXIT THE LOOP
+                    System.out.println("Successfully parsed API key using MemberCheck service. Returning to main menu.");
+                    menuPortal();
+                }
+                else {
+                    System.out.println("Could not get a successful response from MemberCheck API; not a valid API key. Please re-enter.");
+                }
+            } catch (java.util.InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a valid key.");
+                scanner.nextLine();
+                //continue;
+            } catch (IOException e) {
+                System.out.println("Issue occurred attempting to connect to MemberCheck API:" + e.getMessage());
+                System.out.println("Try again.");
+                scanner.nextLine();
+                //continue;
+            }
+        }
+    }
+
+    private static void menuPortal(){
+        Scanner scanner = new Scanner(System.in);
         int choice = -1;
 
         while (choice != 9) {
@@ -57,7 +93,6 @@ public class CommandLineApp {
             }
         }
     }
-
     private static void menu0() {
         Scanner scanner = new Scanner(System.in);
         int choice = -1;
@@ -195,39 +230,7 @@ public class CommandLineApp {
     }
 
     private static void callFunction0() {
-        Scanner scanner = new Scanner(System.in);
-        String inputKey = "";
 
-        System.out.println("\n\nMenu 0: Enter Your API Key");
-        System.out.println("Your API key can be obtained from the MemberCheck portal, under your profile.");
-        System.out.println("Depending on your Command-Line, you might need to press CTRL+V or RIGHT-CLICK to paste your key in.");
-
-        while (inputKey.equals("")) {
-
-            System.out.print("Enter your key: ");
-
-            try {
-                String tempKey =scanner.next();
-
-                if(apiService.isValidApiKey(tempKey)){
-                    inputKey = tempKey;
-                    System.out.println("Successfully parsed API key using MemberCheck service. Returning to main menu.");
-                    break;
-                }
-                else {
-                    System.out.println("Could not get a successful response from MemberCheck API; not a valid API key. Please re-enter.");
-                }
-            } catch (java.util.InputMismatchException e) {
-                System.out.println("Invalid input. Please enter a valid key.");
-                scanner.nextLine();
-                //continue;
-            } catch (IOException e) {
-                System.out.println("Issue occurred attempting to connect to MemberCheck API:" + e.getMessage());
-                System.out.println("Try again.");
-                scanner.nextLine();
-                //continue;
-            }
-        }
     }
 
     private static void callFunction1() {
