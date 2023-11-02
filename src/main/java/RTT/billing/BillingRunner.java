@@ -1,8 +1,6 @@
 package RTT.billing;
 
 import RTT.billing.Util.*;
-import RTT.billing.Config.SystemParameters;
-import com.esotericsoftware.yamlbeans.YamlReader;
 import com.google.gson.JsonArray;
 import RTT.billing.data.TreeNode;
 import RTT.billing.Service.ApiService;
@@ -13,7 +11,6 @@ import RTT.billing.enumerable.Status;
 import java.io.*;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class BillingRunner {
     public static void main(String[] args) throws IOException, CsvException {
@@ -34,18 +31,24 @@ public class BillingRunner {
 //        } catch (IllegalArgumentException e) {
 //            System.out.println(e.getMessage());
 //        }
-
+//        Map<String, Integer> usageList = new HashMap<>();
+//        usageList.put("Entry 1", 10);
+//        usageList.put("Entry 2", 20);
+//        usageList.put("Entry 3", 30);
+//
+//        HandlerCSV.WriteQuarterlyUsage(usageList);
 
         System.out.println("===Testing CSVPath===");
         //TODO: output it to a csv
 
         String csvPath = "/sample.csv";
-        String keyPath = "/0/key.txt";
+        //String keyPath = "/0/key.txt";
 
-        List<String[]> myCSV = HandlerCSV.Read(csvPath);
+        List<String[]> myCSV = HandlerCSV.read(csvPath);
         //HandlerCSV.Print(myCSV);
 
-        String apiKey = HandlerTxt.Read(keyPath);
+        //String apiKey = HandlerTxt.Read(keyPath);
+        String apiKey = "sample";
 
         ApiService apiService = new ApiService(apiKey);
 

@@ -2,13 +2,19 @@ package RTT.billing;
 
 import RTT.billing.Service.ApiService;
 import RTT.billing.Util.DateUtil;
+import RTT.billing.Util.HandlerCSV;
 import RTT.billing.Util.TreeUtil;
 import RTT.billing.data.TreeNode;
+import RTT.billing.enumerable.Status;
 import com.google.gson.JsonElement;
+import com.opencsv.exceptions.CsvException;
 
+import java.time.format.DateTimeFormatter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
+import java.time.Period;
+import java.util.stream.Collectors;
 
 public class CommandLineApp {
     //private static String apiKey;
@@ -32,17 +38,16 @@ public class CommandLineApp {
             System.out.print("Enter your key: ");
 
             try {
-                String tempKey =scanner.next();
+                String tempKey = scanner.next();
 
-                if(!apiService.isValidApiKey(tempKey)){   //TODO: DELETE THIS LINE, USE BELOW- just for testing
-                //if(apiService.isValidApiKey(tempKey)){    //TODO: use this line
+                if (!apiService.isValidApiKey(tempKey)) {   //TODO: DELETE THIS LINE, USE BELOW- just for testing
+                    //if(apiService.isValidApiKey(tempKey)){    //TODO: use this line
                     inputKey = tempKey;     //THIS IS THE ONLY WAY TO EXIT THE LOOP
                     apiService.setApiKey(tempKey);
                     System.out.println("Successfully parsed API key using MemberCheck service. Entering main menu.");
                     chooseRttNode();
                     //menuPortal();
-                }
-                else {
+                } else {
                     System.out.println("Could not get a successful response from MemberCheck API; not a valid API key. Please re-enter.");
                 }
             } catch (java.util.InputMismatchException e) {
@@ -57,27 +62,27 @@ public class CommandLineApp {
         }
     }
 
-    private static void chooseRttNode(){    //This function is in charge of selecting up the Organizational Structure and RTT governing organization's Org_Id
+    private static void chooseRttNode() {    //This function is in charge of selecting up the Organizational Structure and RTT governing organization's Org_Id
 
         System.out.println("\n\n===Choose RTT Org Node===");
         System.out.println("In order to access billing data, the program will need guidance on which Org_Id is directly above the client organizations.");
         System.out.println("Please enter the number that corresponds to HOW FAR FROM THE ROOT the nearest RTT organization occupies above the client organizations. Here are some examples:");
         System.out.println(
                 "\n- RTT Org -> [0]\n" +
-                "\t- Client1\n" +
-                "\t- Client1\n" +
-                "//[0] represents the root. Here, you would enter [0] since RTT Org is at the root AND closest to client-level.\n"
+                        "\t- Client1\n" +
+                        "\t- Client1\n" +
+                        "//[0] represents the root. Here, you would enter [0] since RTT Org is at the root AND closest to client-level.\n"
         );
         System.out.println(
                 "- RTT Org -> [0]\n" +
-                "\t- RTT SubOrg -> [1]\n" +
-                "\t\t- Client1\n" +
-                "\t\t- Client2\n" +
-                "//[0] represents the root, and [1] represents 1 level away from root. Here, you would enter [1] since RTT SubOrg is 1 level away from the root AND is closest to client-level.\n"
+                        "\t- RTT SubOrg -> [1]\n" +
+                        "\t\t- Client1\n" +
+                        "\t\t- Client2\n" +
+                        "//[0] represents the root, and [1] represents 1 level away from root. Here, you would enter [1] since RTT SubOrg is 1 level away from the root AND is closest to client-level.\n"
         );
         System.out.println("I will now print the tree so that you can choose which level to enter.");
 
-        try{
+        try {
             JsonElement allOrgs = apiService.fetchOrgListData();
             root = TreeUtil.buildTree(allOrgs).getRoot();
             if (root != null) {
@@ -85,32 +90,30 @@ public class CommandLineApp {
                 System.out.println("==================================================================");
                 TreeUtil.printTree(root, "\t");
                 System.out.println("\n");
-            }
-            else{
+            } else {
                 System.out.println("\nTree data was not constructed successfully. There is no tree available.");
             }
-        }catch (IOException e){
+        } catch (IOException e) {
             System.out.println("Issue occurred attempting to connect to MemberCheck API:" + e.getMessage() + " please try again.");
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Error trying to construct or print the resulting tree. The membercheck API may have changed.");
         }
 
         Scanner scanner = new Scanner(System.in);
         //int choice = -1;
 
-        while (true){
+        while (true) {
             try {
                 System.out.print("Enter the closest RTT Organization Level: ");
                 int temp = scanner.nextInt();
-                System.out.print("You chose level "+temp+". Are you sure? Re-type the number to confirm.");
+                System.out.print("You chose level " + temp + ". Are you sure? Re-type the number to confirm. ");
                 int confirmation = scanner.nextInt();
-                if(temp == confirmation){
+                if (temp == confirmation) {
                     System.out.println("RTT organizational level confirmed. Continuing to main menu now.");
                     rttOrgLevel = temp;
                     menuPortal();
                     //choice =99;
-                }
-                else
+                } else
                     System.out.println("Sorry, the numbers didn't match. Please re-enter.");
 
             } catch (java.util.InputMismatchException e) {
@@ -121,7 +124,7 @@ public class CommandLineApp {
         }
     }
 
-    private static void menuPortal(){
+    private static void menuPortal() {
         Scanner scanner = new Scanner(System.in);
         int choice = -1;
 
@@ -191,7 +194,11 @@ public class CommandLineApp {
         while (yearAndQuarter[1] == -1) {
             try {
                 int temp = scanner.nextInt();
-                if (temp >= 0 && temp <5)
+                if (temp ==99 && yearAndQuarter[0] == 99){
+                    System.out.println("Returning to main menu.");
+                    menuPortal();
+                }
+                if (temp >= 0 && temp < 5)
                     yearAndQuarter[1] = temp;
                 else
                     System.out.println("Invalid quarter was entered. Please enter a number within [1,2,3,4].");
@@ -207,22 +214,27 @@ public class CommandLineApp {
             List<TreeNode> companyNodes = closestRttNode.getChildren();
             LocalDate[] desiredDate = DateUtil.getQuartileDates(yearAndQuarter[0], yearAndQuarter[1]);
 
-            Map<String,Integer> quarterlyBillingScanCountMapper = new HashMap<>();
+            Map<String, Integer> quarterlyBillingScanCountMapper = new HashMap<>();
 
-            for(TreeNode node : companyNodes)
-                quarterlyBillingScanCountMapper.put(node.getId(), TreeUtil.sumSumSingleAndBatchScansForPeriod(node, apiService,desiredDate));
+            for (TreeNode node : companyNodes)
+                quarterlyBillingScanCountMapper.put(node.getId(), TreeUtil.sumSumSingleAndBatchScansForPeriod(node, apiService, desiredDate));
 
             for (var elem : quarterlyBillingScanCountMapper.entrySet())
-                System.out.println(elem.getKey() + ": "+ elem.getValue() + " regular scans");
+                System.out.println(elem.getKey() + ": " + elem.getValue() + " regular scans");
+
+
+            HandlerCSV.WriteUsage(quarterlyBillingScanCountMapper, "src/main/resources/2_QuarterlyBilling/Output.csv");
 
             //TODO: note that the report does not include scans done on day itself today
+            System.out.println("Quarterly Scan Count Usage for Every Organization In This API Account has Been Printed to CSV. You can find it under src/main/resources/2_QuarterlyBilling/Output.csv");
+            menuPortal();
 
 
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         } catch (IOException e) {
             System.out.println(e.getMessage());
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             System.out.println(e.getMessage());
             System.out.println("The tree data is invalid. Something has gone wrong.");
             System.out.println("Returning to main menu.");
@@ -232,11 +244,19 @@ public class CommandLineApp {
 
     private static void menu3() {
         System.out.println("\n\n===Menu 3: Get Contract Renewal Statistics (Top-Level Nodes, Respective Monitoring Scans which are CURRENTLY TURNED ON (Incl. Sub-Orgs))===");
+        System.out.println("BEFORE beginning, please check the following path:");
+        System.out.println("src/main/resources/3_ContractRenewal/Input.csv");
+        System.out.println("\tYou must FIRST update this CSV file with all ongoing contracts for this function to work.");
+        System.out.println("\t\t- The format is as follows: Org_Id, Contract Start Date and Contract End Date for this function to work.");
+        System.out.println("\t\t-Contract Start Date and End Date MUST be in DD-MM-YYYY format.");
+        System.out.println("\tThe system will automatically filter out which contracts end in 2 months or less.");
+        System.out.println("\tAfter following the format in the given file, input [1] to receive the statistics.");
+        System.out.println("You may also input [99] to return to the main menu.");
 
+        Scanner scanner = new Scanner(System.in);
+        int choice = -1;
 
-        while (choice != 99) {
-            System.out.println("\n\n===Menu 3: ===");
-            System.out.println("[99] Go Back to Main Menu");
+        while (true) {
             System.out.print("Enter your choice: ");
 
             try {
@@ -248,8 +268,61 @@ public class CommandLineApp {
             }
 
             switch (choice) {
+                case 1:
+                    try {
+                        Status status = Status.On;  //retrieve the CURRENTLY ON SCANS
+
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+                        String csvPath = "/3_ContractRenewal/Input.csv";
+                        List<String[]> myCSV = HandlerCSV.read(csvPath);
+                        Map<String, LocalDate[]> orgContractMapper = new HashMap<>();
+                        for (String[] entry : myCSV) {
+                            Period period = Period.between(LocalDate.now(), LocalDate.parse(entry[2], formatter));
+
+                            if (period.getMonths() > 0 && period.getMonths() <= 2) { //Handle only entries with end dates less than 2 months
+                                LocalDate[] contractStartEnd = new LocalDate[2];
+                                contractStartEnd[0] = LocalDate.parse(entry[1], formatter);
+                                contractStartEnd[1] = LocalDate.parse(entry[2], formatter);
+                                orgContractMapper.put(entry[0], contractStartEnd);
+                            }
+                        }
+
+                        TreeNode closestRttNode = root.getNodeAtLevel(rttOrgLevel);
+                        List<TreeNode> companyNodes = closestRttNode.getChildren();
+
+                        companyNodes = companyNodes.stream().filter(x -> orgContractMapper.containsKey(x.getId())).collect(Collectors.toList()); //filter the companyNodes list based on the orgContractMapper
+
+                        Map<String, Integer> contractRenewalScanCountMapper = new HashMap<>();
+
+                        for (TreeNode node : companyNodes)
+                            contractRenewalScanCountMapper.put(node.getId(), TreeUtil.sumMonitoringScansForPeriodByStatus(node, apiService, orgContractMapper.get(node.getId()), status));
+
+                        for (var elem : contractRenewalScanCountMapper.entrySet())
+                            System.out.println(elem.getKey() + ": " + elem.getValue() + " monitoring scans with status = \"" + status + "\"");
+
+                        HandlerCSV.WriteUsage(contractRenewalScanCountMapper, "src/main/resources/3_ContractRenewal/Output.csv");
+
+                        //TODO: note that the report does not include scans done on day itself today
+                        System.out.println("Contract Renewal Monitoring Scan Usage for Every Organization With Contract Date Expiring Within 2 Months has Been Printed to CSV. You can find it under src/main/resources/3_ContractRenewal/Output.csv");
+                        menuPortal();
+
+                    } catch (IOException e) {
+                        System.out.println(e.getMessage());
+                    } catch (CsvException e) {
+                        System.out.println(e.getMessage());
+                    } catch (NullPointerException e) {
+                        System.out.println(e.getMessage());
+                        System.out.println("The tree data is invalid. Something has gone wrong.");
+                        System.out.println("Returning to main menu.");
+                        menuPortal();
+                    }
+
+
+                    break;
                 case 99:
                     System.out.println("Returning to Main Menu");
+                    menuPortal();
                     break;
                 default:
                     System.out.println("Invalid choice. Please enter a valid option.");
@@ -259,9 +332,8 @@ public class CommandLineApp {
     }
 
     private static void menu4() {
-       //TODO: implement when have access to the API- cannot decode the JSON structure otherwise
+        //TODO: implement when have access to the API- cannot decode the JSON structure otherwise
     }
-
 
 
     public static boolean isString(String input) {
