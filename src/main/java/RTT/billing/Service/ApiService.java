@@ -1,4 +1,5 @@
 package RTT.billing.Service;
+
 import RTT.billing.enumerable.Status;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -12,6 +13,7 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.util.EntityUtils;
+
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -32,7 +34,7 @@ public class ApiService {
 
     public ApiService(String apiKey) {
         this.apiKey = apiKey;
-        this.dateTimeFormatter= DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        this.dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         this.connectionManager = new PoolingHttpClientConnectionManager();
         connectionManager.setMaxTotal(10);
         connectionManager.setDefaultMaxPerRoute(5);
@@ -83,47 +85,42 @@ public class ApiService {
         if (entity != null) {
             // Convert the response content to a JSON string and return it
             return EntityUtils.toString(entity);
-        }
-        else {
+        } else {
             throw new IOException("No data was received");
         }
     }
 
-    public void validateApiKey(){
-        if (apiKey == null || apiKey.isEmpty())
-            throw new IllegalArgumentException("API key cannot be empty or null");
-    }
 
     public JsonElement fetchSingleMemberScanData(String orgId, LocalDate sDate, LocalDate eDate) throws IOException {
-        validateApiKey();
+//        validateApiKey();
         String url = "https://demo.api.membercheck.com/api/v2/data-management/member-scans"
-                +"?from="
-                +sDate.format(dateTimeFormatter).replace("-","%2F")
-                +"&to="
-                +eDate.format(dateTimeFormatter).replace("-","%2F");
+                + "?from="
+                + sDate.format(dateTimeFormatter).replace("-", "%2F")
+                + "&to="
+                + eDate.format(dateTimeFormatter).replace("-", "%2F");
         HttpUriRequest request = createScanRequest(url, apiKey, orgId);
         return JsonParser.parseString(fetchDataFromApi(request));
     }
 
-    public JsonElement fetchSingleCorpScanData(String orgId,LocalDate sDate, LocalDate eDate) throws IOException {
-        validateApiKey();
+    public JsonElement fetchSingleCorpScanData(String orgId, LocalDate sDate, LocalDate eDate) throws IOException {
+//        validateApiKey();
         String url = "https://demo.api.membercheck.com/api/v2/data-management/corp-scans"
-                +"?from="
-                +sDate.format(dateTimeFormatter).replace("-","%2F")
-                +"&to="
-                +eDate.format(dateTimeFormatter).replace("-","%2F");
+                + "?from="
+                + sDate.format(dateTimeFormatter).replace("-", "%2F")
+                + "&to="
+                + eDate.format(dateTimeFormatter).replace("-", "%2F");
         HttpUriRequest request = createScanRequest(url, apiKey, orgId);
         return JsonParser.parseString(fetchDataFromApi(request));
     }
 
     public JsonElement fetchBatchMemberScanData(String orgId, LocalDate sDate, LocalDate eDate) throws IOException {
-        validateApiKey();
+//        validateApiKey();
 
         String url = "https://demo.api.membercheck.com/api/v2/member-scans/batch"
-                +"?from="
-                +sDate.format(dateTimeFormatter).replace("-","%2F")
-                +"&to="
-                +eDate.format(dateTimeFormatter).replace("-","%2F");
+                + "?from="
+                + sDate.format(dateTimeFormatter).replace("-", "%2F")
+                + "&to="
+                + eDate.format(dateTimeFormatter).replace("-", "%2F");
         HttpUriRequest request = createScanRequest(url, apiKey, orgId);
 
         //Can also use "https://demo.api.membercheck.com/api/v2/data-management/member-batch-scans"
@@ -134,13 +131,13 @@ public class ApiService {
     }
 
     public JsonElement fetchBatchCorpScanData(String orgId, LocalDate sDate, LocalDate eDate) throws IOException {
-        validateApiKey();
+//        validateApiKey();
 
         String url = "https://demo.api.membercheck.com/api/v2/corp-scans/batch"
-                +"?from="
-                +sDate.format(dateTimeFormatter).replace("-","%2F")
-                +"&to="
-                +eDate.format(dateTimeFormatter).replace("-","%2F");
+                + "?from="
+                + sDate.format(dateTimeFormatter).replace("-", "%2F")
+                + "&to="
+                + eDate.format(dateTimeFormatter).replace("-", "%2F");
         HttpUriRequest request = createScanRequest(url, apiKey, orgId);
 
         //Can also use "https://demo.api.membercheck.com/api/v2/data-management/corp-batch-scans"
@@ -150,8 +147,8 @@ public class ApiService {
         return JsonParser.parseString(fetchDataFromApi(request));
     }
 
-    public JsonElement fetchMonitoringMemberScanData(String orgId, Status status)  throws IOException {
-        validateApiKey();
+    public JsonElement fetchMonitoringMemberScanData(String orgId, Status status) throws IOException {
+//        validateApiKey();
         //TODO: need to filter manually
         //Status: On, Off, All
         String url = "https://demo.api.membercheck.com/api/v2/monitoring-lists/member?status=" + status.toString();
@@ -159,8 +156,8 @@ public class ApiService {
         return JsonParser.parseString(fetchDataFromApi(request));
     }
 
-    public JsonElement fetchMonitoringCorpScanData(String orgId, Status status)  throws IOException {
-        validateApiKey();
+    public JsonElement fetchMonitoringCorpScanData(String orgId, Status status) throws IOException {
+//        validateApiKey();
         //TODO: need to filter manually
         //Status: On, Off, All
         String url = "https://demo.api.membercheck.com/api/v2/monitoring-lists/corp?status=" + status.toString();
@@ -169,9 +166,34 @@ public class ApiService {
     }
 
     public JsonElement fetchOrgListData() throws IOException {
-        validateApiKey();
+//        validateApiKey();
         String url = "https://demo.api.membercheck.com/api/v2/organisations";
         HttpUriRequest request = createOrgListRequest(url, apiKey);
         return JsonParser.parseString(fetchDataFromApi(request));
     }
+
+    public boolean isValidApiKey(String sampleApiKey) throws IOException {
+        if (sampleApiKey == null || sampleApiKey.isEmpty())
+            return false;
+
+        HttpUriRequest testRequest = createOrgListRequest("https://demo.api.membercheck.com/api/v2/organisations", sampleApiKey);
+
+        HttpClient httpClient = HttpClients.custom()
+                .setConnectionManager(connectionManager)
+                .build();
+        HttpResponse response = httpClient.execute(testRequest);
+        int statusCode = response.getStatusLine().getStatusCode();
+//        if (statusCode == 401)
+//            return false;
+//        return true;
+        if (statusCode != 200)
+            return false;
+        return true;
+    }
+
+    //    public void validateApiKey(){
+//        if (apiKey == null || apiKey.isEmpty())
+//            throw new IllegalArgumentException("API key cannot be empty or null");
+//    }
+
 }

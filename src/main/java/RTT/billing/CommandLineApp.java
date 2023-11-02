@@ -1,10 +1,19 @@
 package RTT.billing;
 
+import RTT.billing.Service.ApiService;
+
+import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class CommandLineApp {
+    private static String apiKey;
+    private static ApiService apiService;
+
     public static void main(String[] args) {
+
+        apiService = new ApiService("");    //create the apiService at the start
+
         Scanner scanner = new Scanner(System.in);
         int choice = -1;
 
@@ -55,7 +64,7 @@ public class CommandLineApp {
 
         while (choice != 2) {
             System.out.println("\n\n===Menu 0: Update API Key===");
-            System.out.println("0. Call Function 0");
+            System.out.println("0. Enter Menu to Input Your API Key");
             System.out.println("1. Go Back to Main Menu");
             System.out.print("Enter your choice: ");
 
@@ -181,8 +190,44 @@ public class CommandLineApp {
         }
     }
 
+    private static void menu4() {
+       //TODO: implement with access to the API
+    }
+
     private static void callFunction0() {
-        System.out.println("Function 0 called.");
+        Scanner scanner = new Scanner(System.in);
+        String inputKey = "";
+
+        System.out.println("\n\nMenu 0: Enter Your API Key");
+        System.out.println("Your API key can be obtained from the MemberCheck portal, under your profile.");
+        System.out.println("Depending on your Command-Line, you might need to press CTRL+V or RIGHT-CLICK to paste your key in.");
+
+        while (inputKey.equals("")) {
+
+            System.out.print("Enter your key: ");
+
+            try {
+                String tempKey =scanner.next();
+
+                if(apiService.isValidApiKey(tempKey)){
+                    inputKey = tempKey;
+                    System.out.println("Successfully parsed API key using MemberCheck service. Returning to main menu.");
+                    break;
+                }
+                else {
+                    System.out.println("Could not get a successful response from MemberCheck API; not a valid API key. Please re-enter.");
+                }
+            } catch (java.util.InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a valid key.");
+                scanner.nextLine();
+                //continue;
+            } catch (IOException e) {
+                System.out.println("Issue occurred attempting to connect to MemberCheck API:" + e.getMessage());
+                System.out.println("Try again.");
+                scanner.nextLine();
+                //continue;
+            }
+        }
     }
 
     private static void callFunction1() {
@@ -191,6 +236,11 @@ public class CommandLineApp {
 
     private static void callFunction2() {
         System.out.println("Function 2 called.");
+    }
+
+    public static boolean isString(String input) {
+        // Use a regular expression to check if it contains only alphabetic characters
+        return input.matches("^[a-zA-Z]+$");
     }
 
 
