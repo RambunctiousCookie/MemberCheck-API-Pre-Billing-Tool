@@ -1,47 +1,20 @@
 useCase0:
-  #Parametric config
-  EXAMPLE_00: "Test"
-  EXAMPLE_01: "Tester"
-  EXAMPLE_02: "Testing"
+  API_KEY: "exampleapikey"
+  # API key MUST be surrounded by quotation marks. Example: "92475627934FWR5455ERW"
+  # Preferably, delete after usage.
 
 useCase1:
-  #Parametric config
-  EXAMPLE_00: "Test"
-  EXAMPLE_01: "Tester"
-  EXAMPLE_02: "Testing"
+  #No need for input
 
+useCase2:
+  DESIRED_YEAR: 2023
+  DESIRED_QUARTER: 1
+  # Quarters are [1,2,3,4] and any other quarter is invalid.
 
+useCase3:
+  ORG_ID: "Example_Org"
+  CONTRACT_EXPIRY_DATE: "31-05-2023"
+  # CONTRACT_EXPIRT_DATE must be of the form DD-MM-YYYY
 
-#Set the Finance Billing Quarterly Dates Here.
-# Only set the DAY and MONTH in DD-MM format.
-# Provide Year Separately in the use case variables above.
-# I have set example quarterly billing dates here, change if RTT billing cycle is different.
-dateConfig:
-  #Quarter One Data --------------------------
-  # ------------------------------------------
-  q1StartDay: 01 # 1-31 DAY OF MONTH
-  q1StartMonth: 01 # 1-12 JAN TO DEC
-  # ----
-  q1EndDay: 31
-  q1EndMonth: 03
-  #Quarter Two Data --------------------------
-  # ------------------------------------------
-  q2StartDay: 01
-  q2StartMonth: 04
-  # ----
-  q2EndDay: 30
-  q2EndMonth: 06
-  #Quarter Three Data ------------------------
-  # ------------------------------------------
-  q3StartDay: 01
-  q3StartMonth: 07
-  # ----
-  q3EndDay: 30
-  q3EndMonth: 09
-  #Quarter Four Data -------------------------
-  # ------------------------------------------
-  q4StartDay: 01
-  q4StartMonth: 10
-  # ----
-  q4EndDay: 31
-  q4EndMonth: 12
+useCase4:
+  #To be implemented
