@@ -45,6 +45,13 @@
             <scope>provided</scope>
         </dependency>
 
+        <!--Yaml Reader-->
+        <dependency>
+            <groupId>com.esotericsoftware.yamlbeans</groupId>
+            <artifactId>yamlbeans</artifactId>
+            <version>1.15</version>
+        </dependency>
+
         <!--Unit Test Dependencies-->
         <dependency>
             <groupId>org.junit.jupiter</groupId>

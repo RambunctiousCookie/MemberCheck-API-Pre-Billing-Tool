@@ -1,3 +1,4 @@
+import Config.YamlConfig;
 import com.google.gson.JsonArray;
 import data.TreeNode;
 import Service.ApiService;
@@ -13,6 +14,15 @@ import java.util.stream.Collectors;
 
 public class BillingRunner {
     public static void main(String[] args) throws IOException, CsvException {
+        System.out.println("===Testing YamlConfig===");
+        String[] configs = {
+                YamlConfig.config.parameters.EXAMPLE_00,
+                YamlConfig.config.parameters.EXAMPLE_01,
+                YamlConfig.config.parameters.EXAMPLE_02
+        };
+        Arrays.stream(configs).forEach(System.out::println);
+        System.out.println("===Testing YamlConfig===");
+
         //TODO: output it to a csv
 
         String csvPath = "/sample.csv";
@@ -28,11 +38,14 @@ public class BillingRunner {
         JsonElement allOrgs = apiService.fetchOrgListData();
         System.out.println("API Call (OrgList) Success");
 
+        System.out.println("//===[1] Get Organizational Tree (Top-Level Nodes)===");
+
         TreeNode root = TreeUtil.buildTree(allOrgs).getRoot();
         if (root != null) {
             TreeUtil.printTree(root, "\t");
         }
-        System.out.println("//----------------------------------------------------");
+
+        System.out.println("//===[2] Get Quarterly Billing Statistics (Top-Level Nodes, Respective Scan Usage (Incl. Sub-Orgs))===");
         List<String> orgIds = root.getChildren().stream().map(x->x.getId()).collect(Collectors.toList());
 
         List<TreeNode> companyNodes = root.getChildren();
@@ -52,7 +65,7 @@ public class BillingRunner {
             //TODO: note that the report does not include scans done on day itself today
             //System.out.println("API Call (Scans) Success");
 
-            System.out.println("//------------------------------------------------");
+            System.out.println("//===[3] Get Contract Renewal Statistics (Top-Level Nodes, Respective Monitoring Scans which are CURRENTLY TURNED ON (Incl. Sub-Orgs)))===");
 
             Map<String,Integer> contractRenewalScanCountMapper = new HashMap<>();
 
@@ -65,7 +78,7 @@ public class BillingRunner {
             for (var elem : contractRenewalScanCountMapper.entrySet())
                 System.out.println(elem.getKey() + ": "+ elem.getValue() + " monitoring scans with status = \""+ status +"\"");
 
-            System.out.println("//------------------------------------------------");
+            System.out.println("//===[4] Get Contract Renewal Statistics (On/Off Monitoring Scan List Per Organization)===");
 
             status = Status.All;
             List<JsonArray> monitoringMemberScanArrayDetails = new ArrayList<>();
@@ -82,8 +95,7 @@ public class BillingRunner {
 //            monitoringMemberScanArrayDetails.stream().forEach(System.out::println);
 //            monitoringCorpScanArrayDetails.stream().forEach(System.out::println);
 
-            //NOTE TO SELF: TODO use ("monitor" -> false) from API as equivalent of Status.Off
-            //System.out.println("//------------------------------------------------");
+            //TODO: NOTE TO SELF- use ("monitor" -> false) from API as equivalent of Status.Off
 
         } catch (IOException e) {
             System.out.println(e.getMessage());

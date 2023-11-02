@@ -1,0 +1,5 @@
+SystemParameters:
+  #Parametric config
+  EXAMPLE_00: "Test"
+  EXAMPLE_01: "Tester"
+  EXAMPLE_02: "Testing"
