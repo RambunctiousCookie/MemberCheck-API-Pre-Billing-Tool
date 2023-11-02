@@ -14,7 +14,10 @@ useCase2:
 useCase3:
   ORG_ID: "Example_Org"
   CONTRACT_EXPIRY_DATE: "31-05-2023"
-  # CONTRACT_EXPIRT_DATE must be of the form DD-MM-YYYY
+  # CONTRACT_EXPIRY_DATE must be of the form DD-MM-YYYY
 
 useCase4:
+  ORG_ID: "Example_Org"
+  CONTRACT_START_DATE: "01-06-2022"
+  CONTRACT_EXPIRY_DATE: "31-05-2023"
   #To be implemented
