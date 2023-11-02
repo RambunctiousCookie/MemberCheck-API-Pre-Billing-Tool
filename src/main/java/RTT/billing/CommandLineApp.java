@@ -42,8 +42,7 @@ public class CommandLineApp {
             try {
                 String tempKey = scanner.next();
 
-                if (!apiService.isValidApiKey(tempKey)) {   //TODO: DELETE THIS LINE, USE BELOW- just for testing
-                    //if(apiService.isValidApiKey(tempKey)){    //TODO: use this line
+                if (apiService.isValidApiKey(tempKey)) {
                     inputKey = tempKey;     //THIS IS THE ONLY WAY TO EXIT THE LOOP
                     apiService.setApiKey(tempKey);
                     System.out.println("Successfully parsed API key using MemberCheck service. Entering main menu.");
@@ -196,7 +195,7 @@ public class CommandLineApp {
         while (yearAndQuarter[1] == -1) {
             try {
                 int temp = scanner.nextInt();
-                if (temp ==99 && yearAndQuarter[0] == 99){
+                if (temp == 99 && yearAndQuarter[0] == 99) {
                     System.out.println("Returning to main menu.");
                     menuPortal();
                 }
@@ -357,21 +356,4 @@ public class CommandLineApp {
         return input.matches("^[a-zA-Z]+$");
     }
 
-
-//    private static int getUserInput(Scanner scanner) {
-//        int input = -1;
-//        boolean validInput = false;
-//
-//        while (!validInput) {
-//            try {
-//                input = scanner.nextInt();
-//                validInput = true;
-//            } catch (InputMismatchException e) {
-//                System.out.println("Invalid input. Please enter a valid integer.");
-//                scanner.nextLine(); // Consume the invalid input
-//            }
-//        }
-//
-//        return input;
-//    }
 }

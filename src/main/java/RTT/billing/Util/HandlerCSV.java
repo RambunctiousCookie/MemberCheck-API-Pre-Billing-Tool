@@ -52,9 +52,6 @@ public class HandlerCSV {
             e.printStackTrace();
         }
     }
-    public static void WriteMonitoredScans(){
-        //TODO: implement
-    }
 
     public static void WriteMonitoredScanDetails(){
         //TODO: implement

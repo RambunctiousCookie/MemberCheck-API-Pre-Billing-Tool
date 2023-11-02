@@ -47,7 +47,6 @@ public class CalculationUtil {
     }
 
     public static int getTotalMonitoringScansByOrgId(ApiService apiService, String orgId, LocalDate[] desiredDate, Status status) throws IOException{
-        //TODO: filtered; TEST FILTERING
         //Json date format should be "dateAdded" -> {JsonPrimitive@3165} ""2023-10-26T12:25:27""
 
         JsonArray monitoringMemberScanArray = apiService.fetchMonitoringMemberScanData(orgId,status).getAsJsonArray();
