@@ -3,9 +3,11 @@ package RTT.billing;
 import RTT.billing.Service.ApiService;
 import RTT.billing.Util.DateUtil;
 import RTT.billing.Util.HandlerCSV;
+import RTT.billing.Util.MonitoringScanUtil;
 import RTT.billing.Util.TreeUtil;
 import RTT.billing.data.TreeNode;
 import RTT.billing.enumerable.Status;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.opencsv.exceptions.CsvException;
 
@@ -333,6 +335,20 @@ public class CommandLineApp {
 
     private static void menu4() {
         //TODO: implement when have access to the API- cannot decode the JSON structure otherwise
+//        System.out.println("//===[4] Get Contract Renewal Statistics (On/Off Monitoring Scan List Per Organization)===");
+//
+//        status = Status.All;
+//        List<JsonArray> monitoringMemberScanArrayDetails = new ArrayList<>();
+//        List<JsonArray> monitoringCorpScanArrayDetails = new ArrayList<>();
+//
+//        for(TreeNode node : companyNodes){
+//            monitoringMemberScanArrayDetails.add(apiService.fetchMonitoringMemberScanData(node.getId(),status).getAsJsonArray());
+//            monitoringCorpScanArrayDetails.add(apiService.fetchMonitoringCorpScanData(node.getId(),status).getAsJsonArray());
+//        }
+//
+//        MonitoringScanUtil.sortMonitoringJsonArray(monitoringMemberScanArrayDetails);
+//        MonitoringScanUtil.sortMonitoringJsonArray(monitoringCorpScanArrayDetails);
+
     }
 
 
