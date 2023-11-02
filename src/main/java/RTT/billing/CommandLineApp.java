@@ -58,21 +58,21 @@ public class CommandLineApp {
 
     private static void chooseRttNode(){    //This function is in charge of selecting up the Organizational Structure and RTT governing organization's Org_Id
 
-        System.out.println("\n\n===Choose RTT Governing Node===");
+        System.out.println("\n\n===Choose RTT Org Node===");
         System.out.println("In order to access billing data, the program will need guidance on which Org_Id is directly above the client organizations.");
         System.out.println("Please enter a number that corresponds to the CLOSEST level that RTT occupies above the client organizations. Here are some examples:");
         System.out.println(
                 "\n- RTT Org [0]\n" +
                 "\t- Client1\n" +
                 "\t- Client1\n" +
-                "//Here, you would enter [0] since RTT Org is closest to client-level.\n"
+                "//[0] represents the root. Here, you would enter [0] since RTT Org is closest to client-level.\n"
         );
         System.out.println(
                 "- RTT Org [0]\n" +
                 "\t- RTT SubOrg [1]\n" +
                 "\t\t- Client1\n" +
                 "\t\t- Client2\n" +
-                "//Here, you would enter [1] since RTT SubOrg is closest to client-level.\n"
+                "//[0] represents the root, and [1] represents 1 level away from root. Here, you would enter [1] since RTT SubOrg is closest to client-level.\n"
         );
         System.out.println("I will now print the tree so that you can choose which level to enter.");
 
@@ -118,7 +118,6 @@ public class CommandLineApp {
                 continue;
             }
         }
-
     }
 
     private static void menuPortal(){
@@ -128,7 +127,7 @@ public class CommandLineApp {
         while (choice != 99) {
             System.out.println("\n\n===Main Menu===");
             System.out.println("To proceed, please type the number representing your choice and press enter.");
-            System.out.println("[1] Check Organizational Tree (Top-Level Nodes)");
+            System.out.println("[1] Review Organizational Tree (Top-Level Nodes, RTT Node)");
             System.out.println("[2] Get Quarterly Billing Statistics (Top-Level Nodes, Respective Scan Usage (Incl. Sub-Orgs))");
             System.out.println("[3] Get Contract Renewal Statistics (Top-Level Nodes, Respective Monitoring Scans which are CURRENTLY TURNED ON (Incl. Sub-Orgs)))");
             //System.out.println("[4] Get Contract Renewal Statistics (On/Off Monitoring Scan List Per Organization)"); //  TODO: implement [4]- unable to map to CSV because I no longer have account access the API as of 231101
@@ -145,7 +144,7 @@ public class CommandLineApp {
 
             switch (choice) {
                 case 1:
-                    menu1();
+                    chooseRttNode();
                     break;
                 case 2:
                     menu2();
@@ -165,52 +164,52 @@ public class CommandLineApp {
         }
     }
 
-    private static void menu1() {   //GET ORG TREE
-        Scanner scanner = new Scanner(System.in);
-        int choice = -1;
-
-        while (choice != 99) {
-            System.out.println("\n\n===Menu 1: Check Organizational Tree (Top-Level Nodes)===");
-
-            try{
-                JsonElement allOrgs = apiService.fetchOrgListData();
-                TreeNode root = TreeUtil.buildTree(allOrgs).getRoot();
-                if (root != null) {
-                    System.out.println("\nAPI was successfully called and Tree was Successfully Constructed.");
-                    System.out.println("==================================================================");
-                    TreeUtil.printTree(root, "\t");
-                    System.out.println("\n");
-                }
-                else{
-                    System.out.println("\nTree data was not constructed successfully. There is no tree available.");
-                }
-            }catch (IOException e){
-                System.out.println("Issue occurred attempting to connect to MemberCheck API:" + e.getMessage() + " please try again.");
-            }catch (Exception e){
-                System.out.println("Error trying to construct or print the resulting tree. The membercheck API may have changed.");
-            }
-
-            System.out.println("[99] Enter 99 to Go Back to Main Menu");
-            System.out.print("Enter your choice: ");
-
-            try {
-                choice = scanner.nextInt();
-            } catch (java.util.InputMismatchException e) {
-                System.out.println("Invalid input. Please enter a valid integer.");
-                scanner.nextLine();
-                continue;
-            }
-
-            switch (choice) {
-                case 99:
-                    System.out.println("Returning to Main Menu.");
-                    return;
-                default:
-                    System.out.println("Invalid choice. Please enter a valid option.");
-                    break;
-            }
-        }
-    }
+//    private static void menu1() {   //GET ORG TREE
+//        Scanner scanner = new Scanner(System.in);
+//        int choice = -1;
+//
+//        while (choice != 99) {
+//            System.out.println("\n\n===Menu 1: Check Organizational Tree (Top-Level Nodes)===");
+//
+//            try{
+//                JsonElement allOrgs = apiService.fetchOrgListData();
+//                TreeNode root = TreeUtil.buildTree(allOrgs).getRoot();
+//                if (root != null) {
+//                    System.out.println("\nAPI was successfully called and Tree was Successfully Constructed.");
+//                    System.out.println("==================================================================");
+//                    TreeUtil.printTree(root, "\t");
+//                    System.out.println("\n");
+//                }
+//                else{
+//                    System.out.println("\nTree data was not constructed successfully. There is no tree available.");
+//                }
+//            }catch (IOException e){
+//                System.out.println("Issue occurred attempting to connect to MemberCheck API:" + e.getMessage() + " please try again.");
+//            }catch (Exception e){
+//                System.out.println("Error trying to construct or print the resulting tree. The membercheck API may have changed.");
+//            }
+//
+//            System.out.println("[99] Enter 99 to Go Back to Main Menu");
+//            System.out.print("Enter your choice: ");
+//
+//            try {
+//                choice = scanner.nextInt();
+//            } catch (java.util.InputMismatchException e) {
+//                System.out.println("Invalid input. Please enter a valid integer.");
+//                scanner.nextLine();
+//                continue;
+//            }
+//
+//            switch (choice) {
+//                case 99:
+//                    System.out.println("Returning to Main Menu.");
+//                    return;
+//                default:
+//                    System.out.println("Invalid choice. Please enter a valid option.");
+//                    break;
+//            }
+//        }
+//    }
 
     private static void menu2() {   //GET QTE BILLING
         Scanner scanner = new Scanner(System.in);
