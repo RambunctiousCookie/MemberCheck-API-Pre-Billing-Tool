@@ -21,11 +21,19 @@ public class BillingRunner {
         System.out.println("===Testing YamlConfig===");
 
 
-        YamlReader reader = new YamlReader(new FileReader("src/main/resources/config.yaml"));
-        SystemParameters parameters = reader.read(SystemParameters.class);
-        reader.close();
+//        YamlReader reader = new YamlReader(new FileReader("src/main/resources/config.yaml"));
+//        SystemParameters parameters = reader.read(SystemParameters.class);
+//        reader.close();
+//
+//        System.out.println(parameters);
 
-        System.out.println(parameters);
+//        for(int i=1;i<=4;i++){
+//            System.out.println("From the YAML file: Start Date and End Date For Quarter "+i +":");
+//            Arrays.stream(DateUtil.getQuartileDates(2023,i)).forEach(x->System.out.println("\t"+x));
+//
+//        }
+
+
 
 
         System.out.println("===Testing CSVPath===");

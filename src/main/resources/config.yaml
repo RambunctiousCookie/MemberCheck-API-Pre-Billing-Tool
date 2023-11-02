@@ -1,47 +1,60 @@
-useCase0:
-  #Parametric config
-  EXAMPLE_00: "Test"
-  EXAMPLE_01: "Tester"
-  EXAMPLE_02: "Testing"
-
-useCase1:
-  #Parametric config
-  EXAMPLE_00: "Test"
-  EXAMPLE_01: "Tester"
-  EXAMPLE_02: "Testing"
-
-
-
 #Set the Finance Billing Quarterly Dates Here.
-# Only set the DAY and MONTH in DD-MM format.
-# Provide Year Separately in the use case variables above.
 # I have set example quarterly billing dates here, change if RTT billing cycle is different.
+
+# Only set the DAY and MONTH in DD-MM format.
+# DO NOT PROVIDE THE YEAR.
+# Use values as-is; for example, for January or first day-of-month, it will be 1 and not 01!
 dateConfig:
   #Quarter One Data --------------------------
   # ------------------------------------------
-  q1StartDay: 01 # 1-31 DAY OF MONTH
-  q1StartMonth: 01 # 1-12 JAN TO DEC
+  q1StartDay: 1 # 1-31 DAY OF MONTH
+  q1StartMonth: 1 # 1-12 JAN TO DEC
   # ----
   q1EndDay: 31
-  q1EndMonth: 03
+  q1EndMonth: 3
   #Quarter Two Data --------------------------
   # ------------------------------------------
-  q2StartDay: 01
-  q2StartMonth: 04
+  q2StartDay: 1
+  q2StartMonth: 4
   # ----
   q2EndDay: 30
-  q2EndMonth: 06
+  q2EndMonth: 6
   #Quarter Three Data ------------------------
   # ------------------------------------------
-  q3StartDay: 01
-  q3StartMonth: 07
+  q3StartDay: 1
+  q3StartMonth: 7
   # ----
   q3EndDay: 30
-  q3EndMonth: 09
+  q3EndMonth: 9
   #Quarter Four Data -------------------------
   # ------------------------------------------
-  q4StartDay: 01
+  q4StartDay: 1
   q4StartMonth: 10
   # ----
   q4EndDay: 31
   q4EndMonth: 12
+
+
+#useCase0:
+#  API_KEY: "exampleapikey"
+#  # API key MUST be surrounded by quotation marks. Example: "92475627934FWR5455ERW"
+#  # Preferably, delete after usage.
+#
+#useCase1:
+##No need for input
+#
+#useCase2:
+#  DESIRED_YEAR: 2023
+#  DESIRED_QUARTER: 1
+#  # Quarters are [1,2,3,4] and any other quarter is invalid.
+#
+#useCase3:
+#  ORG_ID: "Example_Org"
+#  CONTRACT_EXPIRY_DATE: "31-05-2023"
+#  # CONTRACT_EXPIRY_DATE must be of the form DD-MM-YYYY
+#
+#useCase4:
+#  ORG_ID: "Example_Org"
+#  CONTRACT_START_DATE: "01-06-2022"
+#  CONTRACT_EXPIRY_DATE: "31-05-2023"
+#  #To be implemented
