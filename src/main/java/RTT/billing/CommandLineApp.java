@@ -1,37 +1,45 @@
 package RTT.billing;
 
 import RTT.billing.Service.ApiService;
+import RTT.billing.Util.TreeUtil;
+import RTT.billing.data.TreeNode;
+import com.google.gson.JsonElement;
 
 import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class CommandLineApp {
-    private static String apiKey;
+    //private static String apiKey;
     private static ApiService apiService;
+    private static TreeNode root;
+    private static int rttOrgLevel;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) {    //This function is in charge of setting the apiService
 
         apiService = new ApiService("");    //create the apiService at the start
 
         Scanner scanner = new Scanner(System.in);
         String inputKey = "";
 
-        System.out.println("\n\nWelcome! This is a preliminary Command-Line Interface for the Pre-Billing Application. To Use, Please Enter Your API Key.");
+        System.out.println("\n\n===Welcome===");
+        System.out.println("This is a preliminary Command-Line Interface for the Pre-Billing Application. To Use, Please Enter Your API Key.");
         System.out.println("\t- Your API key can be obtained from the MemberCheck portal, under your profile.");
         System.out.println("\t- Depending on your Command-Line Interface, you might need to press CTRL+V or RIGHT-CLICK to paste your key in.");
 
         while (inputKey.equals("")) {
-
             System.out.print("Enter your key: ");
 
             try {
                 String tempKey =scanner.next();
 
-                if(apiService.isValidApiKey(tempKey)){
+                if(!apiService.isValidApiKey(tempKey)){   //TODO: DELETE THIS LINE, USE BELOW- just for testing
+                //if(apiService.isValidApiKey(tempKey)){    //TODO: use this line
                     inputKey = tempKey;     //THIS IS THE ONLY WAY TO EXIT THE LOOP
-                    System.out.println("Successfully parsed API key using MemberCheck service. Returning to main menu.");
-                    menuPortal();
+                    apiService.setApiKey(tempKey);
+                    System.out.println("Successfully parsed API key using MemberCheck service. Entering main menu.");
+                    chooseRttNode();
+                    //menuPortal();
                 }
                 else {
                     System.out.println("Could not get a successful response from MemberCheck API; not a valid API key. Please re-enter.");
@@ -41,27 +49,90 @@ public class CommandLineApp {
                 scanner.nextLine();
                 //continue;
             } catch (IOException e) {
-                System.out.println("Issue occurred attempting to connect to MemberCheck API:" + e.getMessage());
-                System.out.println("Try again.");
+                System.out.println("Issue occurred attempting to connect to MemberCheck API:" + e.getMessage() + " please try again.");
                 scanner.nextLine();
                 //continue;
             }
         }
     }
 
+    private static void chooseRttNode(){    //This function is in charge of selecting up the Organizational Structure and RTT governing organization's Org_Id
+
+        System.out.println("\n\n===Choose RTT Governing Node===");
+        System.out.println("In order to access billing data, the program will need guidance on which Org_Id is directly above the client organizations.");
+        System.out.println("Please enter a number that corresponds to the CLOSEST level that RTT occupies above the client organizations. Here are some examples:");
+        System.out.println(
+                "\n- RTT Org [0]\n" +
+                "\t- Client1\n" +
+                "\t- Client1\n" +
+                "//Here, you would enter [0] since RTT Org is closest to client-level.\n"
+        );
+        System.out.println(
+                "- RTT Org [0]\n" +
+                "\t- RTT SubOrg [1]\n" +
+                "\t\t- Client1\n" +
+                "\t\t- Client2\n" +
+                "//Here, you would enter [1] since RTT SubOrg is closest to client-level.\n"
+        );
+        System.out.println("I will now print the tree so that you can choose which level to enter.");
+
+        try{
+            JsonElement allOrgs = apiService.fetchOrgListData();
+            root = TreeUtil.buildTree(allOrgs).getRoot();
+            if (root != null) {
+                System.out.println("\nAPI was successfully called and Tree was Successfully Constructed.");
+                System.out.println("==================================================================");
+                TreeUtil.printTree(root, "\t");
+                System.out.println("\n");
+            }
+            else{
+                System.out.println("\nTree data was not constructed successfully. There is no tree available.");
+            }
+        }catch (IOException e){
+            System.out.println("Issue occurred attempting to connect to MemberCheck API:" + e.getMessage() + " please try again.");
+        }catch (Exception e){
+            System.out.println("Error trying to construct or print the resulting tree. The membercheck API may have changed.");
+        }
+
+        Scanner scanner = new Scanner(System.in);
+        //int choice = -1;
+
+        while (true){
+            try {
+                System.out.print("Enter the closest RTT Organization Level: ");
+                int temp = scanner.nextInt();
+                System.out.print("You chose level "+temp+". Are you sure? Re-type the number to confirm.");
+                int confirmation = scanner.nextInt();
+                if(temp == confirmation){
+                    System.out.println("RTT organizational level confirmed. Continuing to main menu now.");
+                    rttOrgLevel = temp;
+                    menuPortal();
+                    //choice =99;
+                }
+                else
+                    System.out.println("Sorry, the numbers didn't match. Please re-enter.");
+
+            } catch (java.util.InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a valid integer.");
+                scanner.nextLine();
+                continue;
+            }
+        }
+
+    }
+
     private static void menuPortal(){
         Scanner scanner = new Scanner(System.in);
         int choice = -1;
 
-        while (choice != 9) {
+        while (choice != 99) {
             System.out.println("\n\n===Main Menu===");
             System.out.println("To proceed, please type the number representing your choice and press enter.");
-            System.out.println("[0] Update API Key");
-            System.out.println("[1] Get Organizational Tree (Top-Level Nodes)");
+            System.out.println("[1] Check Organizational Tree (Top-Level Nodes)");
             System.out.println("[2] Get Quarterly Billing Statistics (Top-Level Nodes, Respective Scan Usage (Incl. Sub-Orgs))");
             System.out.println("[3] Get Contract Renewal Statistics (Top-Level Nodes, Respective Monitoring Scans which are CURRENTLY TURNED ON (Incl. Sub-Orgs)))");
             //System.out.println("[4] Get Contract Renewal Statistics (On/Off Monitoring Scan List Per Organization)"); //  TODO: implement [4]- unable to map to CSV because I no longer have account access the API as of 231101
-            System.out.println("[9] Quit");
+            System.out.println("[99] Quit");
             System.out.print("Enter your choice: ");
 
             try {
@@ -73,9 +144,6 @@ public class CommandLineApp {
             }
 
             switch (choice) {
-                case 0:
-                    menu0();
-                    break;
                 case 1:
                     menu1();
                     break;
@@ -83,9 +151,12 @@ public class CommandLineApp {
                     menu2();
                     break;
                 case 3:
-                    //menu3();
+                    menu3();
                     break;
-                case 9:
+//                case 4:
+//                    menu4();
+//                    break;
+                case 99:
                     System.out.println("Exiting the application.");
                     break;
                 default:
@@ -93,14 +164,33 @@ public class CommandLineApp {
             }
         }
     }
-    private static void menu0() {
+
+    private static void menu1() {   //GET ORG TREE
         Scanner scanner = new Scanner(System.in);
         int choice = -1;
 
-        while (choice != 2) {
-            System.out.println("\n\n===Menu 0: Update API Key===");
-            System.out.println("0. Enter Menu to Input Your API Key");
-            System.out.println("1. Go Back to Main Menu");
+        while (choice != 99) {
+            System.out.println("\n\n===Menu 1: Check Organizational Tree (Top-Level Nodes)===");
+
+            try{
+                JsonElement allOrgs = apiService.fetchOrgListData();
+                TreeNode root = TreeUtil.buildTree(allOrgs).getRoot();
+                if (root != null) {
+                    System.out.println("\nAPI was successfully called and Tree was Successfully Constructed.");
+                    System.out.println("==================================================================");
+                    TreeUtil.printTree(root, "\t");
+                    System.out.println("\n");
+                }
+                else{
+                    System.out.println("\nTree data was not constructed successfully. There is no tree available.");
+                }
+            }catch (IOException e){
+                System.out.println("Issue occurred attempting to connect to MemberCheck API:" + e.getMessage() + " please try again.");
+            }catch (Exception e){
+                System.out.println("Error trying to construct or print the resulting tree. The membercheck API may have changed.");
+            }
+
+            System.out.println("[99] Enter 99 to Go Back to Main Menu");
             System.out.print("Enter your choice: ");
 
             try {
@@ -112,10 +202,7 @@ public class CommandLineApp {
             }
 
             switch (choice) {
-                case 0:
-                    callFunction0();
-                    break;
-                case 1:
+                case 99:
                     System.out.println("Returning to Main Menu.");
                     return;
                 default:
@@ -125,80 +212,51 @@ public class CommandLineApp {
         }
     }
 
-    private static void menu1() {
+    private static void menu2() {   //GET QTE BILLING
         Scanner scanner = new Scanner(System.in);
-        int choice = -1;
+        int[] yearAndQuarter = {-1000,-1 };
 
-        while (choice != 2) {
-            System.out.println("\n\n===Menu 1: Get Organizational Tree (Top-Level Nodes)===");
-            System.out.println("0. Call Function 1");
-            System.out.println("1. Go Back to Main Menu");
-            System.out.print("Enter your choice: ");
+        System.out.println("\n\n===Menu 2: Get Quarterly Billing Statistics (Top-Level Nodes, Respective Scan Usage (Incl. Sub-Orgs))===");
+        System.out.println("If you wish to exit this menu and return to the main menu, please enter [99] twice.");
+        System.out.println("Otherwise, to retrieve the quarterly billing statistics, follow these instructions:");
+        System.out.print("\t- Check [config.yaml] in [src/main/resources] and ensure that the various start and end dates for each quarter are correct. Otherwise, data retrieval would not be over the correct period.");
+        System.out.print("\t- First enter your desired YEAR (YYYY format), followed by your desired QUARTER (1-4)");
 
+        while (yearAndQuarter[0] == -1000) {
             try {
-                choice = scanner.nextInt();
+                int temp = scanner.nextInt();
+                if (temp >= 0 && temp <= 9999)
+                    yearAndQuarter[0] = temp;
+                else
+                    System.out.println("Invalid year was entered. Please enter a non-negative number.");
             } catch (java.util.InputMismatchException e) {
                 System.out.println("Invalid input. Please enter a valid integer.");
                 scanner.nextLine();
-                continue;
-            }
-
-            switch (choice) {
-                case 0:
-                    callFunction1();
-                    break;
-                case 1:
-                    System.out.println("Returning to Main Menu.");
-                    return;
-                default:
-                    System.out.println("Invalid choice. Please enter a valid option.");
-                    break;
             }
         }
-    }
-
-    private static void menu2() {
-        Scanner scanner = new Scanner(System.in);
-        int choice = -1;
-
-        while (choice != 2) {
-            System.out.println("\n\n===Menu 2===");
-            System.out.println("0. Call Function 2");
-            System.out.println("1. Go Back to Main Menu");
-            System.out.print("Enter your choice: ");
-
+        while (yearAndQuarter[1] == -1) {
             try {
-                choice = scanner.nextInt();
+                int temp = scanner.nextInt();
+                if (temp >= 0 && temp <5)
+                    yearAndQuarter[1] = temp;
+                else
+                    System.out.println("Invalid quarter was entered. Please enter a number within [1,2,3,4].");
             } catch (java.util.InputMismatchException e) {
                 System.out.println("Invalid input. Please enter a valid integer.");
                 scanner.nextLine();
-                continue;
-            }
-
-            switch (choice) {
-                case 0:
-                    callFunction2();
-                    break;
-                case 1:
-                    return;
-                case 2:
-                    System.out.println("Exiting Menu 2.");
-                    break;
-                default:
-                    System.out.println("Invalid choice. Please enter a valid option.");
-                    break;
             }
         }
+
+
     }
 
     private static void menu3() {
         Scanner scanner = new Scanner(System.in);
         int choice = -1;
 
-        while (choice != 2) {
-            System.out.println("\n\n===Menu 2===");
-            System.out.println("0. Call Function 2");
-            System.out.println("1. Go Back to Main Menu");
+        while (choice != 99) {
+            System.out.println("\n\n===Menu 3: ===");
+            System.out.println("[99] Go Back to Main Menu");
             System.out.print("Enter your choice: ");
 
             try {
@@ -210,13 +268,8 @@ public class CommandLineApp {
             }
 
             switch (choice) {
-                case 0:
-                    callFunction2();
-                    break;
-                case 1:
-                    return;
-                case 2:
-                    System.out.println("Exiting Menu 2.");
+                case 99:
+                    System.out.println("Returning to Main Menu");
                     break;
                 default:
                     System.out.println("Invalid choice. Please enter a valid option.");
@@ -229,17 +282,7 @@ public class CommandLineApp {
        //TODO: implement with access to the API
     }
 
-    private static void callFunction0() {
 
-    }
-
-    private static void callFunction1() {
-        System.out.println("Function 1 called.");
-    }
-
-    private static void callFunction2() {
-        System.out.println("Function 2 called.");
-    }
 
     public static boolean isString(String input) {
         // Use a regular expression to check if it contains only alphabetic characters

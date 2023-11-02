@@ -42,7 +42,7 @@ public class BillingRunner {
         }
 
         System.out.println("//===[2] Get Quarterly Billing Statistics (Top-Level Nodes, Respective Scan Usage (Incl. Sub-Orgs))===");
-        List<String> orgIds = root.getChildren().stream().map(x->x.getId()).collect(Collectors.toList());
+        //List<String> orgIds = root.getChildren().stream().map(x->x.getId()).collect(Collectors.toList());
 
         List<TreeNode> companyNodes = root.getChildren();
         //TODO: more modular way of doing it
