@@ -18,6 +18,24 @@ import java.util.stream.Collectors;
 public class BillingRunner {
     public static void main(String[] args) throws IOException, CsvException {
 
+//        System.out.println("===Test tree===");
+//        TreeNode origin = new TreeNode("RTT Org", "RTT Root Organization");
+//        TreeNode subOrg = new TreeNode("RTT SubOrg", "RTT Sub Organization");
+//        TreeNode client1 = new TreeNode("Client1", "Railway Systems");
+//
+//        origin.getChildren().add(subOrg);
+//        subOrg.getChildren().add(client1);
+//
+//        int levelToAccess = 0; // Change this to the desired level
+//
+//        try {
+//            String nameAtLevel = origin.getIdAtLevel(levelToAccess);
+//            System.out.println("ID at level " + levelToAccess + ": " + nameAtLevel);
+//        } catch (IllegalArgumentException e) {
+//            System.out.println(e.getMessage());
+//        }
+
+
         System.out.println("===Testing CSVPath===");
         //TODO: output it to a csv
 

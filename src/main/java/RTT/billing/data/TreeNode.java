@@ -38,4 +38,18 @@ public class TreeNode {
         //return this.name + " (" + this.id + ")";
         return this.id;
     }
+
+    public String getIdAtLevel(int level) {
+        if (level == 0) {
+            return this.id;
+        } else if (level > 0) {
+//            TreeNode eg1 = children.get(0);
+//            String eg2 = eg1.getIdAtLevel(level - 1);
+//
+//            return eg2;
+            return children.get(0).getIdAtLevel(level - 1); //TODO: adjust for better method when have access to the API. This is imperfect especially if RTT has multiple suborgs at the desired level.
+        } else {
+            throw new IllegalArgumentException("Level " + level + " is out of bounds.");
+        }
+    }
 }
