@@ -1,13 +1,14 @@
 package RTT.billing;
 
 import RTT.billing.Service.ApiService;
+import RTT.billing.Util.DateUtil;
 import RTT.billing.Util.TreeUtil;
 import RTT.billing.data.TreeNode;
 import com.google.gson.JsonElement;
 
 import java.io.IOException;
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.time.LocalDate;
+import java.util.*;
 
 public class CommandLineApp {
     //private static String apiKey;
@@ -60,16 +61,16 @@ public class CommandLineApp {
 
         System.out.println("\n\n===Choose RTT Org Node===");
         System.out.println("In order to access billing data, the program will need guidance on which Org_Id is directly above the client organizations.");
-        System.out.println("Please enter a number that corresponds to HOW FAR FROM THE ROOT the nearest RTT organization occupies above the client organizations. Here are some examples:");
+        System.out.println("Please enter the number that corresponds to HOW FAR FROM THE ROOT the nearest RTT organization occupies above the client organizations. Here are some examples:");
         System.out.println(
-                "\n- RTT Org ->[0]\n" +
+                "\n- RTT Org -> [0]\n" +
                 "\t- Client1\n" +
                 "\t- Client1\n" +
                 "//[0] represents the root. Here, you would enter [0] since RTT Org is at the root AND closest to client-level.\n"
         );
         System.out.println(
-                "- RTT Org ->[0]\n" +
-                "\t- RTT SubOrg ->[1]\n" +
+                "- RTT Org -> [0]\n" +
+                "\t- RTT SubOrg -> [1]\n" +
                 "\t\t- Client1\n" +
                 "\t\t- Client2\n" +
                 "//[0] represents the root, and [1] represents 1 level away from root. Here, you would enter [1] since RTT SubOrg is 1 level away from the root AND is closest to client-level.\n"
@@ -171,9 +172,9 @@ public class CommandLineApp {
         System.out.println("\n\n===Menu 2: Get Quarterly Billing Statistics (Top-Level Nodes, Respective Scan Usage (Incl. Sub-Orgs))===");
         System.out.println("If you wish to exit this menu and return to the main menu, please enter [99] twice.");
         System.out.println("Otherwise, to retrieve the quarterly billing statistics, follow these instructions:");
-        System.out.print("\t- Check [config.yaml] in [src/main/resources] and ensure that the various start and end dates for each quarter are correct. Otherwise, data retrieval would not be over the correct period.");
-        System.out.print("\t- First enter your desired YEAR (YYYY format), followed by your desired QUARTER (1-4)");
-
+        System.out.println("\t- Check [config.yaml] in [src/main/resources] and ensure that the various start and end dates for each quarter are correct. Otherwise, data retrieval would not be over the correct period.");
+        System.out.println("\t- First enter your desired YEAR (YYYY format), followed by your desired QUARTER (1-4)");
+        System.out.print("Enter desired YEAR (YYYY format): ");
         while (yearAndQuarter[0] == -1000) {
             try {
                 int temp = scanner.nextInt();
@@ -186,6 +187,7 @@ public class CommandLineApp {
                 scanner.nextLine();
             }
         }
+        System.out.print("Enter desired QUARTER (1-4): ");
         while (yearAndQuarter[1] == -1) {
             try {
                 int temp = scanner.nextInt();
@@ -200,18 +202,37 @@ public class CommandLineApp {
         }
 
         try {
-            String rttOrgId = root.getIdAtLevel(rttOrgLevel);
-            System.out.println("ID at level " + levelToAccess + ": " + nameAtLevel);
+            TreeNode closestRttNode = root.getNodeAtLevel(rttOrgLevel);
+
+            List<TreeNode> companyNodes = closestRttNode.getChildren();
+            LocalDate[] desiredDate = DateUtil.getQuartileDates(yearAndQuarter[0], yearAndQuarter[1]);
+
+            Map<String,Integer> quarterlyBillingScanCountMapper = new HashMap<>();
+
+            for(TreeNode node : companyNodes)
+                quarterlyBillingScanCountMapper.put(node.getId(), TreeUtil.sumSumSingleAndBatchScansForPeriod(node, apiService,desiredDate));
+
+            for (var elem : quarterlyBillingScanCountMapper.entrySet())
+                System.out.println(elem.getKey() + ": "+ elem.getValue() + " regular scans");
+
+            //TODO: note that the report does not include scans done on day itself today
+
+
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        } catch (NullPointerException e){
+            System.out.println(e.getMessage());
+            System.out.println("The tree data is invalid. Something has gone wrong.");
+            System.out.println("Returning to main menu.");
+            menuPortal();
         }
-
-
     }
 
     private static void menu3() {
-        Scanner scanner = new Scanner(System.in);
-        int choice = -1;
+        System.out.println("\n\n===Menu 3: Get Contract Renewal Statistics (Top-Level Nodes, Respective Monitoring Scans which are CURRENTLY TURNED ON (Incl. Sub-Orgs))===");
+
 
         while (choice != 99) {
             System.out.println("\n\n===Menu 3: ===");
@@ -238,7 +259,7 @@ public class CommandLineApp {
     }
 
     private static void menu4() {
-       //TODO: implement with access to the API
+       //TODO: implement when have access to the API- cannot decode the JSON structure otherwise
     }
 
 
