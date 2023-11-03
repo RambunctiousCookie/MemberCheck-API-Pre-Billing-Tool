@@ -13,7 +13,7 @@
 
 ## Requirements
 
-Before you can run the AppAML application, make sure you have the following requirements installed on your system:
+Before you can run the tool, make sure you have the following requirements installed on your system:
 
 0. **Clone this Repository**
    - Click on the green button in the top right-hand corner called `code` and then `download zip`.
@@ -28,7 +28,7 @@ Before you can run the AppAML application, make sure you have the following requ
 3. **Java:**
    - You'll need Java to run the application. Ensure that you have Java installed on your system.
    - If not, you can download it from the official Oracle website: [Java Downloads](https://www.oracle.com/java/technologies/javase-downloads.html).
-   - Please download `JDK-17`
+   - Please download version `JDK-17`.
    - Make sure to add Java to your system's PATH or classpath so that the application can locate it.
      - Go to search and type in "Env" or "Environment Variables".
        <div style="text-align: center;"><img src="https://media.geeksforgeeks.org/wp-content/uploads/20201116195922/Screenshot20201116at71805PM.png" alt="image_tutorial" width="300"></div>
