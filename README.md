@@ -195,6 +195,7 @@ Follow these steps to install and run the AppAML application:
 ### Java
    - Original API calls were done in Python.
    - Ported over to Java to facilitate easier Spring-Boot compatibility (Important for future implementation).
+   - Use `InputStream` methods as much as possible so that external `.csv` and `.yaml` files remain accessible after building.
      
 ### HTTP Connection Pooling Manager
    - The `ApiService` class contains a field reference to a `PoolingHttpClientConnectionManager` object.
