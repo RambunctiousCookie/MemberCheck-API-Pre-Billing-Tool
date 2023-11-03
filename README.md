@@ -53,7 +53,7 @@ Follow these steps to install and run the AppAML application:
        - For example, `cd D:\WS\VsCode\RTTbilling`
    - Type `mvn clean install` and execute by pressing enter.
    - If successful, you should see something similar to the following output:
-  
+
 
    ```shell
      ...
@@ -65,7 +65,7 @@ Follow these steps to install and run the AppAML application:
     [INFO] Finished at: 2023-11-03T12:36:26+08:00
     [INFO] ------------------------------------------------------------------------
    ```
-  
+  2. **Running the Project:**
    - You can now run the project by pressing the play icon at the top right hand corner of the VsCode UI `Play > Run Java` or `Play > Debug Java`
 
    
