@@ -10,6 +10,10 @@
    - **Caveats**
       - Use Case 3 may contain bugs, as I no longer have access to the API to test it with.
       - Use Case 4 could not be implemented as the data is parsed as a `List<JsonElement>`, and no longer have credential access to retrieve the structure from the API endpoint.
+   - **Deliverables**
+      - Design Documents (Concerning Future Spring-Boot Integration) Uploaded to *Lupl* as of 31 October 2023.
+	  - Technical Documentation (Concerning Re-Scoped Application/Tool) Updated as of 03 November 2023 (This document).
+	  - Re-Scoped Application/Tool Updated and Shared to Ben Loh and Michael Lees as of  03 November 2023 (This repository).
 
 ## Requirements
 
