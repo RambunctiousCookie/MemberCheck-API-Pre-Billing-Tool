@@ -6,7 +6,7 @@
    - **Current Progress**
       - Backend functions tested.
       - Frontend CLI connected.
-      - Database not implemented.
+      - Decided against Database implementation (Continue using .csv).
    - **Caveats**
       - Use Case 3 may contain bugs, as I no longer have access to the API to test it with
       - Use Case 4 could not be implemented as the data is parsed as a `List<JsonElement>`, and no longer have credential access to retrieve the structure from the API endpoint
