@@ -41,7 +41,7 @@ public class CommandLineApp {
                 String tempKey = scanner.next();
                 if (apiService.isValidApiKey(tempKey)) {
                     apiService.setApiKey(tempKey);
-                    System.out.println("Successfully parsed API key using MemberCheck service. Entering main menu.");
+                    System.out.println("Successfully parsed API key using MemberCheck service. Entering \'Choose RTT Org Node\' Menu.");
                     chooseRttNode();    //THIS IS THE ONLY FORK TO EXIT THE LOOP
                 } else {
                     System.out.println("Could not get a successful response from MemberCheck API; not a valid API key. Please re-enter.");
