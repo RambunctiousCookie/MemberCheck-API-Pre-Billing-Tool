@@ -29,25 +29,20 @@ public class CommandLineApp {
         apiService = new ApiService("");    //create the apiService at the start
 
         Scanner scanner = new Scanner(System.in);
-        String inputKey = "";
 
         System.out.println("\n\n===Welcome===");
         System.out.println("This is a preliminary Command-Line Interface for the Pre-Billing Application. To Use, Please Enter Your API Key.");
         System.out.println("\t- Your API key can be obtained from the MemberCheck portal, under your profile.");
         System.out.println("\t- Depending on your Command-Line Interface, you might need to press CTRL+V or RIGHT-CLICK to paste your key in.");
 
-        while (inputKey.equals("")) {
+        while (true) {
             System.out.print("Enter your key: ");
-
             try {
                 String tempKey = scanner.next();
-
                 if (apiService.isValidApiKey(tempKey)) {
-                    inputKey = tempKey;     //THIS IS THE ONLY WAY TO EXIT THE LOOP
                     apiService.setApiKey(tempKey);
                     System.out.println("Successfully parsed API key using MemberCheck service. Entering main menu.");
-                    chooseRttNode();
-                    //menuPortal();
+                    chooseRttNode();    //THIS IS THE ONLY FORK TO EXIT THE LOOP
                 } else {
                     System.out.println("Could not get a successful response from MemberCheck API; not a valid API key. Please re-enter.");
                 }
@@ -210,10 +205,12 @@ public class CommandLineApp {
         }
 
         try {
-            TreeNode closestRttNode = root.getNodeAtLevel(rttOrgLevel);
 
-            List<TreeNode> companyNodes = closestRttNode.getChildren();
             LocalDate[] desiredDate = DateUtil.getQuartileDates(yearAndQuarter[0], yearAndQuarter[1]);
+
+            TreeNode closestRttNode = root.getNodeAtLevel(rttOrgLevel);
+            List<TreeNode> companyNodes = closestRttNode.getChildren();
+
 
             Map<String, Integer> quarterlyBillingScanCountMapper = new HashMap<>();
 
