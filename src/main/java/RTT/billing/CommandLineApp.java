@@ -223,7 +223,9 @@ public class CommandLineApp {
 
             HandlerCSV.WriteUsage(quarterlyBillingScanCountMapper, "src/main/resources/2_QuarterlyBilling/Output.csv");
 
-            //TODO: note that the report does not include scans done on day itself today
+            //Note that the report does not include scans done on day itself today; hence this function would include more scans than are reflected on the website/UI
+            //The MemberCheck UI is essentially 'late'
+
             System.out.println("Quarterly Scan Count Usage for Every Organization In This API Account has Been Printed to CSV. You can find it under src/main/resources/2_QuarterlyBilling/Output.csv");
             menuPortal();
 
@@ -248,8 +250,9 @@ public class CommandLineApp {
         System.out.println("\t\t- The format is as follows: Org_Id, Contract Start Date and Contract End Date for this function to work.");
         System.out.println("\t\t-Contract Start Date and End Date MUST be in DD-MM-YYYY format.");
         System.out.println("\tThe system will automatically filter out which contracts end in 2 months or less.");
-        System.out.println("\tAfter following the format in the given file, input [1] to receive the statistics.");
-        System.out.println("You may also input [99] to return to the main menu.");
+        System.out.println("After entering the details following the format in the given file, you may proceed to do the following inputs:");
+        System.out.println("\t[1] to receive the statistics.");
+        System.out.println("\t[99] to return to the main menu.");
 
         Scanner scanner = new Scanner(System.in);
         int choice = -1;
@@ -302,7 +305,8 @@ public class CommandLineApp {
                         HandlerCSV.WriteUsage(contractRenewalScanCountMapper, "src/main/resources/3_ContractRenewal/Output.csv");
 
                         //Note that the Membercheck UI report does not include scans done on day itself today- so this function would have more updated data
-                        
+                        //The MemberCheck UI is essentially 'late'
+
                         System.out.println("Contract Renewal Monitoring Scan Usage for Every Organization With Contract Date Expiring Within 2 Months has Been Printed to CSV. You can find it under src/main/resources/3_ContractRenewal/Output.csv");
                         menuPortal();
 
