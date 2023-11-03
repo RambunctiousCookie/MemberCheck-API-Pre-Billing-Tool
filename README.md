@@ -93,10 +93,16 @@ Follow these steps to install and run the AppAML application:
            - Depending on your Command-Line Interface, you might need to press CTRL+V or RIGHT-CLICK to paste your key in.
    Enter your key:
    ```
-   - The API Key entered has no Cloud interaction.
+   - When retrieveing the API Key from the MemberCheck Portal:
+      - Firstly generate the key.
+	  - Secondly, press 'save' under profile details.
+		- This is **IMPORTANT** as the API Key will NOT persist otherwise.
+   - The API Key entered into this tool has no Cloud interaction.
       - As part of the Membercheck API documentation/requirement, the API key is included in every header which is posted to the various endpoints.
       - To confirm/check that no sensitive endpoints (such as `POST` or `DELETE`) are being used, please look in the `ApiService.java` file for the various endpoint methods.
    - The API Key exists in volatile memory to reduce security breach vectors.
+	  - It is NEVER written into persistent memory.
+      - This is to prevent mishandling or loss of API keys through on-premise computer breaches.
       - Future implementation may require an additional security layer to encrypt the API Key (particularly for persistent DB storage).
    - Implementation might need to be changed upon adoption of a web frameworks (see design documents in Lupl).
      
