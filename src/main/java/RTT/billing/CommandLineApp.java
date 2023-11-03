@@ -25,7 +25,6 @@ public class CommandLineApp {
     private static int rttOrgLevel;
 
     public static void main(String[] args) {    //This function is in charge of setting the apiService
-
         apiService = new ApiService("");    //create the apiService at the start
         Scanner scanner = new Scanner(System.in);
 
@@ -58,7 +57,6 @@ public class CommandLineApp {
     }
 
     private static void chooseRttNode() {    //This function is in charge of selecting up the Organizational Structure and RTT governing organization's Org_Id
-
         System.out.println("\n\n===Choose RTT Org Node===");
         System.out.println("In order to access billing data, the program will need guidance on which Org_Id is directly above the client organizations.");
         System.out.println("Please enter the number that corresponds to HOW FAR FROM THE ROOT the nearest RTT organization occupies above the client organizations. Here are some examples:");
