@@ -5,7 +5,7 @@
       - Implement two functions which will assist in the pre-billing process by computing data fetched from the MemberCheck API.
    - **Current Progress**
       - Backend functions tested.
-      - Frontend CLI connected.
+      - Frontend Command-Line-Interface (CLI) connected.
       - Decided against Database implementation (Continue using .csv).
    - **Caveats**
       - Use Case 3 may contain bugs, as I no longer have access to the API to test it with
