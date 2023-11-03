@@ -53,21 +53,30 @@ Follow these steps to install and run the AppAML application:
        - For example, `cd D:\WS\VsCode\RTTbilling`
    - Type `mvn clean install` and execute by pressing enter.
    - If successful, you should see something similar to the following output:
-
-
-   ```shell
-     ...
-    [INFO] Installing D:\WS\VsCode\RTTbilling\target\AppAML-1.0-SNAPSHOT.jar to C:\Users\...\.m2\repository\org\example\AppAML\1.0-SNAPSHOT\AppAML-1.0-SNAPSHOT.jar
-    [INFO] ------------------------------------------------------------------------
-    [INFO] BUILD SUCCESS
-    [INFO] ------------------------------------------------------------------------
-    [INFO] Total time:  5.470 s
-    [INFO] Finished at: 2023-11-03T12:36:26+08:00
-    [INFO] ------------------------------------------------------------------------
-   ```
+      ```shell
+        ...
+       [INFO] Installing D:\WS\VsCode\RTTbilling\target\AppAML-1.0-SNAPSHOT.jar to C:\Users\...\.m2\repository\org\example\AppAML\1.0-SNAPSHOT\AppAML-1.0-SNAPSHOT.jar
+       [INFO] ------------------------------------------------------------------------
+       [INFO] BUILD SUCCESS
+       [INFO] ------------------------------------------------------------------------
+       [INFO] Total time:  5.470 s
+       [INFO] Finished at: 2023-11-03T12:36:26+08:00
+       [INFO] ------------------------------------------------------------------------
+      ```
    
   2. **Running the Project:**
      
-   - You can now run the project by pressing the play icon at the top right hand corner of the VsCode UI `Play > Run Java` or `Play > Debug Java`
+      - You can now run the project by pressing the play icon at the top right hand corner of the VsCode UI `Play > Run Java` or `Play > Debug Java`
+      - This will bring you to the first screen:
+         ```shell
+         ===Welcome===
+         This is a preliminary Command-Line Interface for the Pre-Billing Application. To Use, Please Enter Your API Key.
+                 - Your API key can be obtained from the MemberCheck portal, under your profile.
+                 - Depending on your Command-Line Interface, you might need to press CTRL+V or RIGHT-CLICK to paste your key in.
+         Enter your key:
+         ```
+  3. **Proper Usage of the Project:**
+      - To-Add
 
-   
+  5. **Technologies Incorporated**
+      - To-Add
