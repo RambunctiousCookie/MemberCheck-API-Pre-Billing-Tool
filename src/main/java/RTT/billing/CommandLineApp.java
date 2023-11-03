@@ -301,7 +301,8 @@ public class CommandLineApp {
 
                         HandlerCSV.WriteUsage(contractRenewalScanCountMapper, "src/main/resources/3_ContractRenewal/Output.csv");
 
-                        //TODO: note that the report does not include scans done on day itself today
+                        //Note that the Membercheck UI report does not include scans done on day itself today- so this function would have more updated data
+                        
                         System.out.println("Contract Renewal Monitoring Scan Usage for Every Organization With Contract Date Expiring Within 2 Months has Been Printed to CSV. You can find it under src/main/resources/3_ContractRenewal/Output.csv");
                         menuPortal();
 
@@ -314,9 +315,9 @@ public class CommandLineApp {
                         System.out.println("The tree data is invalid. Something has gone wrong.");
                         System.out.println("Returning to main menu.");
                         menuPortal();
+                    } catch (IndexOutOfBoundsException e) {
+                        System.out.println("The input csv structure may be malformed. Error: " + e.getMessage());
                     }
-
-
                     break;
                 case 99:
                     System.out.println("Returning to Main Menu");
