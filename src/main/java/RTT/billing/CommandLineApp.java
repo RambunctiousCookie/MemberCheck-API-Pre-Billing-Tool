@@ -27,7 +27,6 @@ public class CommandLineApp {
     public static void main(String[] args) {    //This function is in charge of setting the apiService
 
         apiService = new ApiService("");    //create the apiService at the start
-
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("\n\n===Welcome===");
