@@ -1,4 +1,4 @@
-# AppAML
+# MemberCheck API Pre-Billing Tool
    - **Goals**
       - To produce a re-scoped application within an accelerated timeframe which can offer pre-billing insights.
       - To reduce as much friction as possible given the accelerated timeframe (do not require billing staff to learn to use a new database).
