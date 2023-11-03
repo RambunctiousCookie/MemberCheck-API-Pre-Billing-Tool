@@ -1,6 +1,9 @@
 # AppAML
-   - Backend functions tested;
-   - Frontend CLI connected but may be buggy particular with consideration to use case 3, as I no longer have access to the API to test it
+   - Backend functions tested.
+   - Frontend CLI connected.
+   - Caveats
+      - Use Case 3 may contain bugs, as I no longer have access to the API to test it with
+      - Use Case 4 could not be implemented as the data is parsed as a `List<JsonElement>`, and no longer have credential access to retrieve the structure from the API endpoint
    - Documentation to be delivered
 
 ## Requirements
