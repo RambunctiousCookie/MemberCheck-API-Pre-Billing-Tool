@@ -154,7 +154,7 @@ Follow these steps to install and run the AppAML application:
       - This is left to the due diligence of the user. 
    - Outputs the billing details
       - Prints to the Command Line
-      - To a file `src/main/resources/2_QuarterlyBilling/Output.csv`
+      - Updates a file `src/main/resources/2_QuarterlyBilling/Output.csv`
 
 ### Get Contract Renewal Statistics Menu
    ```shell
@@ -173,7 +173,7 @@ Follow these steps to install and run the AppAML application:
    - The system will automatically filter out which contracts end in 2 months or less.
    - Outputs the monitoring usage details where the status is turned **ON**:
       - Prints to the Command Line
-      - To a file `src/main/resources/3_ContractRenewal/Output.csv`
+      - Updates a file `src/main/resources/3_ContractRenewal/Output.csv`
         
 ### Get Contract Renewal Statistics Menu (Individual Company Monitoring Details)
    - Backend logic has already been written and works as of `31 October 2023`.
