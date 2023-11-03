@@ -11,13 +11,13 @@
       - Use Case 3 may contain bugs, as I no longer have access to the API to test it with.
       - Use Case 4 could not be implemented as the data is parsed as a `List<JsonElement>`, and no longer have credential access to retrieve the structure from the API endpoint.
    - **Deliverables**
-      - Design Documents (Concerning Future Spring-Boot Integration) Uploaded to *Lupl* as of 31 October 2023.
-	  - Technical Documentation (Concerning Re-Scoped Application/Tool) Updated as of 03 November 2023 (This document).
-	  - Re-Scoped Application/Tool Updated and Shared to Ben Loh and Michael Lees as of  03 November 2023 (This repository).
+      - Design Documents (Concerning Future Spring-Boot Integration) Uploaded to *Lupl* as of *31 October 2023*.
+	  - Technical Documentation (Concerning Re-Scoped Application/Tool) Updated as of *03 November 2023* (This document).
+	  - Re-Scoped Application/Tool Updated and Shared to *Ben Loh* and *Michael Lees* of *Rajah and Tann Technologies (RTTech)* as of  *03 November 2023* (This repository).
 
 ## Requirements
 
-Before you can run the tool, make sure you have the following requirements installed on your system:
+Before running the tool, make sure you have the following requirements installed on your system:
 
 0. **Clone this Repository**
    - Click on the green button in the top right-hand corner called `code` and then `download zip`.
@@ -96,7 +96,8 @@ Follow these steps to install and run the AppAML application:
    - The API Key entered has no Cloud interaction.
       - As part of the Membercheck API documentation/requirement, the API key is included in every header which is posted to the various endpoints.
       - To confirm/check that no sensitive endpoints (such as `POST` or `DELETE`) are being used, please look in the `ApiService.java` file for the various endpoint methods.
-   - It exists in volatile memory to reduce security breach vectors.
+   - The API Key exists in volatile memory to reduce security breach vectors.
+      - Future implementation may require an additional security layer to encrypt the API Key (particularly for persistent DB storage).
    - Implementation might need to be changed upon adoption of a web frameworks (see design documents in Lupl).
      
 ### Choose RTT Org Node Menu
@@ -193,7 +194,7 @@ Follow these steps to install and run the AppAML application:
    - I am unable to implement the mapping logic because I no longer have access to the API as of `3 November 2023.`
    - Outputs the monitoring usage details where the monitoring scans' status is either turned **ON** or **OFF**.
       - In essence, it goes through **all scans** and returns a list of the granular details of each scan (the individuals/corporations that each organization was scanning at the time).
-   - Logic can be found in `private static void menu4() ` of `src\main\java\RTT\billing\CommandLineApp.java`.
+   - Logic can be found in `private static void menu4()` of `src\main\java\RTT\billing\CommandLineApp.java`.
 
 ## Technologies Incorporated
 ### Java
