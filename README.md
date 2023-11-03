@@ -44,7 +44,9 @@ Before you can run the AppAML application, make sure you have the following requ
    - Similar to Java, add Maven to your system's PATH or classpath for easy access.
    - You can confirm whether this worked or not by opening `cmd.exe` and typing `mvn -version` to check if it has been successfully added to path.
      - If installation is successful, your command-line output will look similar to the following:
-     - `Apache Maven 3.9.5 (57804ffe001d7215b5e7bcb531cf83df38f93546) ...`
+      ```shell
+       Apache Maven 3.9.5 (57804ffe001d7215b5e7bcb...) ...
+      ```
 
 ## Installation and Running
 
