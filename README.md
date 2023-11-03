@@ -1,10 +1,15 @@
 # AppAML
-   - Backend functions tested.
-   - Frontend CLI connected.
-   - Caveats
+   - **Goals**
+      - To produce a re-scoped application within an accelerated timeframe which can offer pre-billing insights.
+      - To reduce as much friction as possible given the accelerated timeframe (do not require billing staff to learn to use a new database).
+      - Implement two functions which will assist in the pre-billing process by computing data fetched from the MemberCheck API.
+   - **Current Progress**
+      - Backend functions tested.
+      - Frontend CLI connected.
+      - Database not implemented.
+   - **Caveats**
       - Use Case 3 may contain bugs, as I no longer have access to the API to test it with
       - Use Case 4 could not be implemented as the data is parsed as a `List<JsonElement>`, and no longer have credential access to retrieve the structure from the API endpoint
-   - Documentation to be delivered
 
 ## Requirements
 
