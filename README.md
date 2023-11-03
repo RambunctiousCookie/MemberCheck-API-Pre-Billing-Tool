@@ -53,7 +53,7 @@ Follow these steps to install and run the AppAML application:
 1. **Rebuild the Project with Maven:**
 
    - Open the project in VScode.
-   - Click on the top tooltip `Terminal > New Terminal`.
+   - Click on the top toolbar/menu `Terminal > New Terminal`.
    - Verify that you are in the location where you have cloned the project during the Requirements stage above.
      - VsCode should automatically change the directory for you.
        - For me, this is `D:\WS\VsCode\RTTbilling`. It may differ for you.
