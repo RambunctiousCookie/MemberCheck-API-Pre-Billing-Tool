@@ -89,7 +89,9 @@ Follow these steps to install and run the AppAML application:
            - Depending on your Command-Line Interface, you might need to press CTRL+V or RIGHT-CLICK to paste your key in.
    Enter your key:
    ```
-   - The API Key entered has no cloud interaction.
+   - The API Key entered has no Cloud interaction.
+      - As part of the Membercheck API documentation/requirement, the API key is included in every header which is posted to the various endpoints.
+      - To confirm/check that no sensitive endpoints (such as `POST` or `DELETE`) are being used, please look in the `ApiService.java` file for the various endpoint methods.
    - It exists in volatile memory to reduce security breach vectors.
    - Implementation might need to be changed upon adoption of a web frameworks (see design documents in Lupl).
      
