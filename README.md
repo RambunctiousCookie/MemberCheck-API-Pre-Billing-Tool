@@ -1,19 +1,19 @@
 # MemberCheck API Pre-Billing Tool
    - **Goals**
       - To produce a re-scoped application within an accelerated timeframe which can offer pre-billing insights.
-      - To reduce as much friction as possible given the accelerated timeframe (do not require billing staff to learn to use a new database).
-      - Implement two functions which will assist in the pre-billing process by computing data fetched from the MemberCheck API.
+      - Minimize friction for billing staff by circumventing the need to learn a new database system.
+      - Implement two key functions to aid the pre-billing process using data from the MemberCheck API.
    - **Current Progress**
-      - Backend functions tested.
-      - Frontend Command-Line-Interface (CLI) connected.
-      - Decided against Database implementation (Continue using .csv).
+      - Backend functions have been tested successfully.
+      - Frontend Command-Line Interface (CLI) is operational.
+      - Database implementation was abandoned in favor of continuing with .csv files.
    - **Caveats**
-      - Use Case 3 may contain bugs, as I no longer have access to the API to test it with.
-      - Use Case 4 could not be implemented as the data is parsed as a `List<JsonElement>`, and no longer have credential access to retrieve the structure from the API endpoint.
+      - Use Case 3 may contain bugs due to lack of access to the API for testing.
+      - Use Case 4 remains unimplemented because data is parsed as List<JsonElement>, and credential access to retrieve the data structure from the API endpoint is no longer available.
    - **Deliverables**
-      - Design Documents (Concerning Future Spring-Boot Integration) Uploaded to *Lupl* as of *31 October 2023*.
-	  - Technical Documentation (Concerning Re-Scoped Application/Tool) Updated as of *03 November 2023* (This document).
-	  - Re-Scoped Application/Tool Updated and Shared to *Ben Loh* and *Michael Lees* of *Rajah and Tann Technologies (RTTech)* as of  *03 November 2023* (This repository).
+      - Design Documents related to future Spring-Boot integration have been uploaded to Lupl as of 31 October 2023.
+	  - Technical Documentation for the re-scoped application/tool has been updated as of 03 November 2023 (see this document).
+	  - Re-Scoped Application/Tool has been updated and shared with *Ben Loh* and *Michael Lees* of Rajah and Tann Technologies (RTTech) as of 03 November 2023 (refer to this repository).
 
 ## Requirements
 
