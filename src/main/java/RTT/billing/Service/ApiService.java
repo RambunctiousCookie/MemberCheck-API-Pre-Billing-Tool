@@ -24,14 +24,6 @@ public class ApiService {
     private DateTimeFormatter dateTimeFormatter;
     private PoolingHttpClientConnectionManager connectionManager;
 
-//    public ApiService() {
-//        this.apiKey = "";
-//        this.dateTimeFormatter= DateTimeFormatter.ofPattern("dd-MM-yyyy");
-//        this.connectionManager = new PoolingHttpClientConnectionManager();
-//        connectionManager.setMaxTotal(10);
-//        connectionManager.setDefaultMaxPerRoute(5);
-//    }
-
     public ApiService(String apiKey) {
         this.apiKey = apiKey;
         this.dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
